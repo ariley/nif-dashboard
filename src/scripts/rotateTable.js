@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let rows = [];
 
   // Define colors for headers
-  const headerColors = ['bg-cyan-500', 'bg-orange-500', 'bg-teal-500', 'bg-blue-500', 'bg-red-500', 'bg-slate-500', 'bg-lime-500'];
+  const headerColors = ['bg-cyan-500', 'bg-orange-500', 'bg-teal-500', 'bg-blue-500', 'bg-red-500', 'bg-slate-500'];
   // Create a mapping from header values to colors
   const headerColorMap = {};
 
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentHeader = rows[i].header;
         // Use the color from the headerColorMap
         const headerColor = headerColorMap[currentHeader];
-        tableBody.innerHTML += `<tr><td colspan="7" class="dark:border-gray-700 font-semibold text-gray-700 uppercase ${headerColor} dark:text-white text-center">${currentHeader}</td></tr>`;
+        tableBody.innerHTML += `<tr><td colspan="7" class="dark:border-gray-700 text-gray-700 uppercase ${headerColor} dark:text-white text-center">${currentHeader}</td></tr>`;
       }
       tableBody.innerHTML += rows[i].html;
     }
