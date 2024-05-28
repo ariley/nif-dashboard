@@ -17,7 +17,8 @@ export default defineConfig({
       './src/upload': 'http://localhost:3000',
     },
   },
-  site: 'https://www.yoursite.com',
+  site: 'https://nif-dashboard-riley45-c15310d27d07474987c11102447766eb05df9900c.sd-pages.llnl.gov/',
+  base: 'riley45',
   outDir: 'public',
   publicDir: 'static',
   vite: {
