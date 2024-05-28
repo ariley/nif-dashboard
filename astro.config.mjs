@@ -12,6 +12,11 @@ import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({
+  server: {
+    proxy: {
+      './src/upload': 'http://localhost:3000',
+    },
+  },
   site: 'https://www.yoursite.com',
   outDir: 'public',
   publicDir: 'static',
