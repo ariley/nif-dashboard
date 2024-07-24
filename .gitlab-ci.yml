@@ -7,8 +7,7 @@ stages:
 npm_install:
   stage: build
   before_script:
-    - yum update -y
-    - yum install -y openssh-clients
+    - apt-get update && apt-get install -y openssh-client
     - npm install -g npm@latest
     - npm cache clean --force
     - eval $(ssh-agent -s)
