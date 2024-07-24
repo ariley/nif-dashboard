@@ -1,19 +1,13 @@
-image: "node:lts-alpine"
+image: "node:18"
 
 stages:
   - build
   - deploy
 
-artifacts:
-  paths:
-    - public
-  only:
-    - master
-
 npm_install:
   stage: build
   before_script:
-    - 'command -v ssh-agent >/dev/null || ( apk add --update openssh )' 
+    - apt-get update && apt-get install -y openssh-client
     - eval $(ssh-agent -s)
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
@@ -22,13 +16,15 @@ npm_install:
     - chmod 644 ~/.ssh/known_hosts
   script:
     - npm install 
-    - ssh $SSH_USER@$VM_IPADDRESS "hostname && echo 'Welcome!' > welcome.txt"
+    - ssh $SSH_USER@$VM_IPADDRESS "hostname && echo 'Welcome!!!' > welcome.txt"
+  artifacts:
+    paths:
+      - public
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     - if: $CI_MERGE_REQUEST_ID
 
 pages:
-  image: wci-repo.llnl.gov:4567/lwds/node:18
   stage: deploy
   before_script:
     - npm clean-install
