@@ -11,6 +11,13 @@ before_script:
   - chmod 700 ~/.ssh
   - ssh-keyscan $VM_IPADDRESS >> ~/.ssh/known_hosts
   - chmod 644 ~/.ssh/known_hosts
+script:
+  - ssh $SSH_USER@$VM_IPADDRESS "hostname && echo 'Welcome!!!' > welcome.txt"
+artifacts:
+    paths:
+    - public
+    only:
+    - master
 npm:install:
   stage: build
   script:
@@ -19,7 +26,6 @@ npm:install:
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     - if: $CI_MERGE_REQUEST_ID
-
 
 # The Docker image that will be used to build your app
 image: wci-repo.llnl.gov:4567/lwds/node:18
