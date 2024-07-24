@@ -7,7 +7,10 @@ stages:
 npm_install:
   stage: build
   before_script:
-    - apt-get update && apt-get install -y openssh-client
+    - yum update -y
+    - yum install -y openssh-clients
+    - npm install -g npm@latest
+    - npm cache clean --force
     - eval $(ssh-agent -s)
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
@@ -15,7 +18,7 @@ npm_install:
     - ssh-keyscan $VM_IPADDRESS >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
-    - npm install 
+    - npm install
     - ssh $SSH_USER@$VM_IPADDRESS "hostname && echo 'Welcome!!!' > welcome.txt"
   artifacts:
     paths:
@@ -27,6 +30,8 @@ npm_install:
 pages:
   stage: deploy
   before_script:
+    - npm install -g npm@latest
+    - npm cache clean --force
     - npm clean-install
   script:
     - npm install
