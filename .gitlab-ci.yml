@@ -1,0 +1,46 @@
+image: "node:18"
+
+stages:
+  - build
+  - deploy
+
+npm_install:
+  stage: build
+  before_script:
+    - apt-get update && apt-get install -y openssh-client
+    - npm install -g npm@latest
+    - npm cache clean --force
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan -H $VM_IPADDRESS >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - cat ~/.ssh/known_hosts
+    - echo "Testing SSH authentication"
+    - ssh -v $SSH_USER@$VM_IPADDRESS "echo 'SSH authentication successful'"
+  script:
+    - npm install
+    - ssh -v $SSH_USER@$VM_IPADDRESS "hostname && echo 'Welcome!!!' > welcome.txt"
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_MERGE_REQUEST_ID
+
+pages:
+  stage: deploy
+  before_script:
+    - npm install -g npm@latest
+    - npm cache clean --force
+    - npm clean-install
+  script:
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
