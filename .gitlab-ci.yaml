@@ -22,7 +22,7 @@ npm_install:
     - chmod 644 ~/.ssh/known_hosts
   script:
     - npm install 
-    - ssh $SSH_USER@$VM_IPADDRESS "hostname && echo 'Welcome!!!' > welcome.txt"
+    - ssh $SSH_USER@$VM_IPADDRESS "hostname && echo 'Welcome!' > welcome.txt"
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     - if: $CI_MERGE_REQUEST_ID
