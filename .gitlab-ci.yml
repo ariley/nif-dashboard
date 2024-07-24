@@ -7,7 +7,9 @@ stages:
 npm_install:
   stage: build
   before_script:
-    - 'command -v ssh-agent >/dev/null || ( apk add --update openssh )' 
+    - apk --no-cache add openssh
+    - apk --no-cache add ca-certificates
+    - update-ca-certificates
     - eval $(ssh-agent -s)
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
@@ -38,4 +40,3 @@ pages:
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-
