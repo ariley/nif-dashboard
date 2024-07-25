@@ -26,7 +26,7 @@ npm_install:
     # - echo "Testing SSH authentication"
     # - ssh -vvv $SSH_USER@$VM_IPADDRESS "echo 'SSH authentication successful'"
   script:
-    - npm install
+    - scp package.json $SSH_USER@$VM_IPADDRESS:/tmp/package.json
     - ssh $SSH_USER@$VM_IPADDRESS "hostname && echo 'Welcome!!!' > welcome.txt"
   artifacts:
     paths:
@@ -38,14 +38,14 @@ npm_install:
 pages:
   stage: deploy
   before_script:
-    - npm install -g npm@latest
-    - npm cache clean --force
-    - npm install
+    - scp package.json $SSH_USER@$VM_IPADDRESS:/tmp/package.json
+    - ssh $SSH_USER@$VM_IPADDRESS "cd /var/www/html && cp /tmp/package.json . && npm install -g npm@latest && npm cache clean --force && npm install || (cat /root/.npm/_logs/*.log && false)"
   script:
-    - npm run build
+    - ssh $SSH_USER@$VM_IPADDRESS "cd /var/www/html && npm run build"
   artifacts:
     paths:
       - public
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+
