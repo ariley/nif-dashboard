@@ -17,14 +17,10 @@ npm_install:
     - echo "$SSH_PRIVATE_KEY_BASE64" | base64 -d > /tmp/ssh_private_key
     - chmod 600 /tmp/ssh_private_key
     - ssh-add /tmp/ssh_private_key
-    # - ssh-add -l  # List all added identities for debugging
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - ssh-keyscan -H $VM_IPADDRESS >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
-    # - cat ~/.ssh/known_hosts
-    # - echo "Testing SSH authentication"
-    # - ssh -vvv $SSH_USER@$VM_IPADDRESS "echo 'SSH authentication successful'"
   script:
     - npm install
     - ssh $SSH_USER@$VM_IPADDRESS "hostname && echo 'Welcome!!!' > welcome.txt"
@@ -48,8 +44,9 @@ pages:
     - ssh-keyscan -H $VM_IPADDRESS >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
     - scp package.json $SSH_USER@$VM_IPADDRESS:/tmp/package.json
+    - scp package-lock.json $SSH_USER@$VM_IPADDRESS:/tmp/package-lock.json
   script:
-    - ssh $SSH_USER@$VM_IPADDRESS "sudo cp /tmp/package.json /var/www/html && sudo /bin/npm install -g npm@latest && sudo /bin/npm cache clean --force && sudo /bin/npm install || (sudo cat /root/.npm/_logs/*.log && false)"
+    - ssh $SSH_USER@$VM_IPADDRESS "sudo cp /tmp/package.json /var/www/html && sudo cp /tmp/package-lock.json /var/www/html && cd /var/www/html && sudo /bin/npm install -g npm@latest && sudo /bin/npm cache clean --force && sudo /bin/npm install || (sudo cat /root/.npm/_logs/*.log && false)"
     - ssh $SSH_USER@$VM_IPADDRESS "cd /var/www/html && sudo /bin/npm run build"
   artifacts:
     paths:
