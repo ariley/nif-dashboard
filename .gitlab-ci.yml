@@ -31,7 +31,7 @@ npm_install:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     - if: $CI_MERGE_REQUEST_ID
 
-pages:
+deploy:
   stage: deploy
   before_script:
     - eval $(ssh-agent -s)
@@ -47,8 +47,17 @@ pages:
   script:
     - ssh $SSH_USER@$VM_IPADDRESS "sudo rm -rf /var/www/html/node_modules && sudo cp /tmp/package.json /var/www/html && sudo cp /tmp/package-lock.json /var/www/html && cd /var/www/html && sudo npm install -g n && sudo n stable && sudo /bin/npm install -g npm@latest --unsafe-perm && sudo /bin/npm cache clean --force && sudo /bin/npm ci --unsafe-perm || (sudo cat /root/.npm/_logs/*.log && false)"
     - ssh $SSH_USER@$VM_IPADDRESS "cd /var/www/html && sudo /bin/npm run build --unsafe-perm"
+    - ssh $SSH_USER@$VM_IPADDRESS "sudo systemctl restart nginx"  # Ensure web server restarts to apply changes
+  only:
+    - main
+
+pages:
+  stage: deploy
+  script:
+    - echo "Deploying to GitLab Pages"
   artifacts:
     paths:
       - public
-  only:
-    - main
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_MERGE_REQUEST_ID
