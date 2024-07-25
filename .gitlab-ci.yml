@@ -10,23 +10,19 @@ variables:
 npm_install:
   stage: build
   before_script:
-    - apt-get update && apt-get install -y openssh-client
-    - npm install -g npm@latest
+    - npm install -g npm@latest --unsafe-perm
     - npm cache clean --force
     - eval $(ssh-agent -s)
     - echo "$SSH_PRIVATE_KEY_BASE64" | base64 -d > /tmp/ssh_private_key
     - chmod 600 /tmp/ssh_private_key
     - ssh-add /tmp/ssh_private_key
-    # - ssh-add -l  # List all added identities for debugging
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - ssh-keyscan -H $VM_IPADDRESS >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
-    # - cat ~/.ssh/known_hosts
-    # - echo "Testing SSH authentication"
-    # - ssh -vvv $SSH_USER@$VM_IPADDRESS "echo 'SSH authentication successful'"
   script:
-    - scp package.json $SSH_USER@$VM_IPADDRESS:/tmp/package.json
+    - rm -rf node_modules  # Clean node_modules directory
+    - npm ci  # Install dependencies using npm ci
     - ssh $SSH_USER@$VM_IPADDRESS "hostname && echo 'Welcome!!!' > welcome.txt"
   artifacts:
     paths:
@@ -38,14 +34,21 @@ npm_install:
 pages:
   stage: deploy
   before_script:
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY_BASE64" | base64 -d > /tmp/ssh_private_key
+    - chmod 600 /tmp/ssh_private_key
+    - ssh-add /tmp/ssh_private_key
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan -H $VM_IPADDRESS >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
     - scp package.json $SSH_USER@$VM_IPADDRESS:/tmp/package.json
-    - ssh $SSH_USER@$VM_IPADDRESS "cd /var/www/html && cp /tmp/package.json . && npm install -g npm@latest && npm cache clean --force && npm install || (cat /root/.npm/_logs/*.log && false)"
+    - scp package-lock.json $SSH_USER@$VM_IPADDRESS:/tmp/package-lock.json
   script:
-    - ssh $SSH_USER@$VM_IPADDRESS "cd /var/www/html && npm run build"
+    - ssh $SSH_USER@$VM_IPADDRESS "sudo rm -rf /var/www/html/node_modules && sudo cp /tmp/package.json /var/www/html && sudo cp /tmp/package-lock.json /var/www/html && cd /var/www/html && sudo npm install -g n && sudo n stable && sudo /bin/npm install -g npm@latest --unsafe-perm && sudo /bin/npm cache clean --force && sudo /bin/npm ci --unsafe-perm || (sudo cat /root/.npm/_logs/*.log && false)"
+    - ssh $SSH_USER@$VM_IPADDRESS "cd /var/www/html && sudo /bin/npm run build --unsafe-perm"
   artifacts:
     paths:
       - public
-  rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-
+  only:
+    - main
