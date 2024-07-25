@@ -19,9 +19,9 @@ npm_install:
     - chmod 700 ~/.ssh
     - ssh-keyscan -H $VM_IPADDRESS >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
-    - cat ~/.ssh/known_hosts
-    - echo "Testing SSH authentication"
-    - ssh -v $SSH_USER@$VM_IPADDRESS "echo 'SSH authentication successful'"
+    # - cat ~/.ssh/known_hosts
+    # - echo "Testing SSH authentication"
+    # - ssh -v $SSH_USER@$VM_IPADDRESS "echo 'SSH authentication successful'"
   script:
     - npm install
     - ssh -v $SSH_USER@$VM_IPADDRESS "hostname && echo 'Welcome!!!' > welcome.txt"
