@@ -11,14 +11,17 @@ npm_install:
     - npm install -g npm@latest
     - npm cache clean --force
     - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - echo "$SSH_PRIVATE_KEY_BASE64" | base64 -d > /tmp/ssh_private_key
+    - chmod 600 /tmp/ssh_private_key
+    - ssh-add /tmp/ssh_private_key
+    - ssh-add -l  # List all added identities for debugging
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - ssh-keyscan -H $VM_IPADDRESS >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
-    - cat ~/.ssh/known_hosts
-    - echo "Testing SSH authentication"
-    - ssh -v $SSH_USER@$VM_IPADDRESS "echo 'SSH authentication successful'"
+    # - cat ~/.ssh/known_hosts
+    # - echo "Testing SSH authentication"
+    # - ssh -v $SSH_USER@$VM_IPADDRESS "echo 'SSH authentication successful'"
   script:
     - npm install
     - ssh -v $SSH_USER@$VM_IPADDRESS "hostname && echo 'Welcome!!!' > welcome.txt"
