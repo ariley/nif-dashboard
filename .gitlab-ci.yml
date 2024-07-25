@@ -26,7 +26,7 @@ npm_install:
     # - echo "Testing SSH authentication"
     # - ssh -vvv $SSH_USER@$VM_IPADDRESS "echo 'SSH authentication successful'"
   script:
-    - scp package.json $SSH_USER@$VM_IPADDRESS:/tmp/package.json
+    - npm install
     - ssh $SSH_USER@$VM_IPADDRESS "hostname && echo 'Welcome!!!' > welcome.txt"
   artifacts:
     paths:
@@ -38,14 +38,22 @@ npm_install:
 pages:
   stage: deploy
   before_script:
+    - apt-get update && apt-get install -y openssh-client
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY_BASE64" | base64 -d > /tmp/ssh_private_key
+    - chmod 600 /tmp/ssh_private_key
+    - ssh-add /tmp/ssh_private_key
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan -H $VM_IPADDRESS >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
     - scp package.json $SSH_USER@$VM_IPADDRESS:/tmp/package.json
-    - ssh $SSH_USER@$VM_IPADDRESS "cd /var/www/html && cp /tmp/package.json . && npm install -g npm@latest && npm cache clean --force && npm install || (cat /root/.npm/_logs/*.log && false)"
   script:
-    - ssh $SSH_USER@$VM_IPADDRESS "cd /var/www/html && npm run build"
+    - ssh $SSH_USER@$VM_IPADDRESS "cd /path/to/project && cp /tmp/package.json . && npm install -g npm@latest && npm cache clean --force && npm install || (cat /root/.npm/_logs/*.log && false)"
+    - ssh $SSH_USER@$VM_IPADDRESS "cd /path/to/project && npm run build"
   artifacts:
     paths:
       - public
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-
