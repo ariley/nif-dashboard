@@ -22,7 +22,8 @@ npm_install:
     - ssh-keyscan -H $VM_IPADDRESS >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
-    - npm ci
+    - rm -rf node_modules  # Clean node_modules directory
+    - npm ci  # Install dependencies using npm ci
     - ssh $SSH_USER@$VM_IPADDRESS "hostname && echo 'Welcome!!!' > welcome.txt"
   artifacts:
     paths:
@@ -46,7 +47,7 @@ pages:
     - scp package.json $SSH_USER@$VM_IPADDRESS:/tmp/package.json
     - scp package-lock.json $SSH_USER@$VM_IPADDRESS:/tmp/package-lock.json
   script:
-    - ssh $SSH_USER@$VM_IPADDRESS "sudo cp /tmp/package.json /var/www/html && sudo cp /tmp/package-lock.json /var/www/html && cd /var/www/html && sudo /bin/npm install -g npm@latest && sudo /bin/npm cache clean --force && sudo /bin/npm ci || (sudo cat /root/.npm/_logs/*.log && false)"
+    - ssh $SSH_USER@$VM_IPADDRESS "sudo rm -rf /var/www/html/node_modules && sudo cp /tmp/package.json /var/www/html && sudo cp /tmp/package-lock.json /var/www/html && cd /var/www/html && sudo /bin/npm install -g npm@latest && sudo /bin/npm cache clean --force && sudo /bin/npm ci || (sudo cat /root/.npm/_logs/*.log && false)"
     - ssh $SSH_USER@$VM_IPADDRESS "cd /var/www/html && sudo /bin/npm run build"
   artifacts:
     paths:
