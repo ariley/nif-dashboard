@@ -49,7 +49,8 @@ pages:
     - chmod 644 ~/.ssh/known_hosts
     - scp package.json $SSH_USER@$VM_IPADDRESS:/tmp/package.json
   script:
-    - ssh $SSH_USER@$VM_IPADDRESS "sudo cp /tmp/package.json /var/www/html && sudo /bin/npm install -g npm@latest && sudo /bin/npm cache clean --force && sudo /bin/npm install
+    - ssh $SSH_USER@$VM_IPADDRESS "sudo cp /tmp/package.json /var/www/html && sudo /bin/npm install -g npm@latest && sudo /bin/npm cache clean --force && sudo /bin/npm install || (sudo cat /root/.npm/_logs/*.log && false)"
+    - ssh $SSH_USER@$VM_IPADDRESS "cd /var/www/html && sudo /bin/npm run build"
   artifacts:
     paths:
       - public
