@@ -23,13 +23,11 @@ npm_install:
   script:
     - rm -rf node_modules  # Clean node_modules directory
     - npm ci  # Install dependencies using npm ci
-    - ssh $SSH_USER@$VM_IPADDRESS "hostname && echo 'Welcome!!!' > welcome.txt"
   artifacts:
     paths:
       - public
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-    - if: $CI_MERGE_REQUEST_ID
 
 deploy:
   stage: deploy
@@ -50,5 +48,5 @@ deploy:
     - ssh $SSH_USER@$VM_IPADDRESS "cd /var/www/html && sudo npm run build --unsafe-perm"
     - ssh $SSH_USER@$VM_IPADDRESS "ls -l /var/www/html"  # List files in the directory to check if they are updated
     - ssh $SSH_USER@$VM_IPADDRESS "sudo systemctl restart nginx"  # Ensure web server restarts to apply changes
-  only:
-    - main
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
