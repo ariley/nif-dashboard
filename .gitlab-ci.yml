@@ -7,19 +7,20 @@ stages:
 variables:
   GIT_SSL_NO_VERIFY: "1"  # Disables SSL verification for git commands
 
+before_script:
+  - npm install -g npm@latest --unsafe-perm
+  - npm cache clean --force
+  - eval $(ssh-agent -s)
+  - echo "$SSH_PRIVATE_KEY_BASE64" | base64 -d > /tmp/ssh_private_key
+  - chmod 600 /tmp/ssh_private_key
+  - ssh-add /tmp/ssh_private_key
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
+  - ssh-keyscan -H $VM_IPADDRESS >> ~/.ssh/known_hosts
+  - chmod 644 ~/.ssh/known_hosts
+
 npm_install:
   stage: build
-  before_script:
-    - npm install -g npm@latest --unsafe-perm
-    - npm cache clean --force
-    - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY_BASE64" | base64 -d > /tmp/ssh_private_key
-    - chmod 600 /tmp/ssh_private_key
-    - ssh-add /tmp/ssh_private_key
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - ssh-keyscan -H $VM_IPADDRESS >> ~/.ssh/known_hosts
-    - chmod 644 ~/.ssh/known_hosts
   script:
     - rm -rf node_modules  # Clean node_modules directory
     - npm ci  # Install dependencies using npm ci
@@ -43,10 +44,20 @@ deploy:
     - scp package.json $SSH_USER@$VM_IPADDRESS:/tmp/package.json
     - scp package-lock.json $SSH_USER@$VM_IPADDRESS:/tmp/package-lock.json
   script:
-    - ssh $SSH_USER@$VM_IPADDRESS "sudo rm -rf /var/www/html/node_modules && sudo cp /tmp/package.json /var/www/html && sudo cp /tmp/package-lock.json /var/www/html && cd /var/www/html && sudo npm install -g npm@latest --unsafe-perm && sudo npm cache clean --force && sudo npm ci --unsafe-perm || (sudo cat /root/.npm/_logs/*.log && false)"
-    - ssh $SSH_USER@$VM_IPADDRESS "source ~/.nvm/nvm.sh && nvm install stable && nvm use stable"
-    - ssh $SSH_USER@$VM_IPADDRESS "cd /var/www/html && sudo npm run build --unsafe-perm"
-    - ssh $SSH_USER@$VM_IPADDRESS "ls -l /var/www/html"  # List files in the directory to check if they are updated
-    - ssh $SSH_USER@$VM_IPADDRESS "sudo systemctl restart nginx"  # Ensure web server restarts to apply changes
+    - ssh $SSH_USER@$VM_IPADDRESS "
+        sudo rm -rf /var/www/html/node_modules && 
+        sudo cp /tmp/package.json /var/www/html && 
+        sudo cp /tmp/package-lock.json /var/www/html && 
+        cd /var/www/html && 
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash && 
+        source ~/.nvm/nvm.sh && 
+        nvm install 18 && 
+        nvm use 18 && 
+        npm install -g npm@latest --unsafe-perm && 
+        npm cache clean --force && 
+        npm ci --unsafe-perm && 
+        npm install -g astro@latest --unsafe-perm && 
+        npm run build --unsafe-perm
+      "
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
