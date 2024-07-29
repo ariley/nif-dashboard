@@ -44,7 +44,7 @@ deploy:
     - scp package-lock.json $SSH_USER@$VM_IPADDRESS:/tmp/package-lock.json
   script:
     - ssh $SSH_USER@$VM_IPADDRESS "sudo rm -rf /var/www/html/node_modules && sudo cp /tmp/package.json /var/www/html && sudo cp /tmp/package-lock.json /var/www/html && cd /var/www/html && sudo npm install -g npm@latest --unsafe-perm && sudo npm cache clean --force && sudo npm ci --unsafe-perm || (sudo cat /root/.npm/_logs/*.log && false)"
-    - ssh $SSH_USER@$VM_IPADDRESS "PATH=\$PATH:/usr/local/bin sudo n stable"
+    - ssh $SSH_USER@$VM_IPADDRESS "PATH=$PATH:/usr/local/bin:/usr/local/lib/node_modules/n/bin sudo n stable"
     - ssh $SSH_USER@$VM_IPADDRESS "cd /var/www/html && sudo npm run build --unsafe-perm"
     - ssh $SSH_USER@$VM_IPADDRESS "ls -l /var/www/html"  # List files in the directory to check if they are updated
     - ssh $SSH_USER@$VM_IPADDRESS "sudo systemctl restart nginx"  # Ensure web server restarts to apply changes
