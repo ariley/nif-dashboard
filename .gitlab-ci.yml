@@ -23,7 +23,7 @@ npm_install:
   stage: build
   script:
     - rm -rf node_modules  # Clean node_modules directory
-    - npm ci  # Install dependencies using npm ci
+    - npm install  # Install dependencies using npm install
   artifacts:
     paths:
       - public
@@ -55,7 +55,7 @@ deploy:
         nvm use 18 && 
         npm install -g npm@latest --unsafe-perm && 
         npm cache clean --force && 
-        npm ci --unsafe-perm && 
+        npm install --unsafe-perm && 
         npm install -g astro@latest --unsafe-perm && 
         npm run build --unsafe-perm
       "
