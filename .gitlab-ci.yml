@@ -44,8 +44,14 @@ deploy:
     - scp package.json $SSH_USER@$VM_IPADDRESS:/tmp/package.json
     - scp package-lock.json $SSH_USER@$VM_IPADDRESS:/tmp/package-lock.json
   script:
-    # Debugging step to check paths and environment variables
-    - ssh $SSH_USER@$VM_IPADDRESS "echo NVM_DIR=\$NVM_DIR && ls -la /home/riley45-sc/.nvm && ls -la /var/www/html && cat /tmp/package.json && cat /tmp/package-lock.json"
+    - ssh $SSH_USER@$VM_IPADDRESS "
+        echo 'Debugging environment variables and paths:' &&
+        echo 'NVM_DIR='$NVM_DIR &&
+        ls -la \$HOME/.nvm &&
+        ls -la /var/www/html &&
+        cat /tmp/package.json &&
+        cat /tmp/package-lock.json
+      "
     - ssh $SSH_USER@$VM_IPADDRESS "
         sudo rm -rf /var/www/html/node_modules &&
         sudo cp /tmp/package.json /var/www/html &&
