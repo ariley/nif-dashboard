@@ -17,7 +17,12 @@ before_script:
   - chmod 700 ~/.ssh
   - ssh-keyscan -H $VM_IPADDRESS >> ~/.ssh/known_hosts
   - chmod 644 ~/.ssh/known_hosts
-  - nvm use 18 || nvm install 18
+  - export NVM_DIR="$HOME/.nvm"
+  - bash -c "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash"
+  - bash -c "source $NVM_DIR/nvm.sh"
+  - nvm install 18
+  - nvm use 18
+  - node -v
 
 cleanup:
   stage: cleanup
@@ -53,7 +58,9 @@ ddeploy:
   script:
     - scp package.json $SSH_USER@$VM_IPADDRESS:/tmp/package.json
     - scp package-lock.json $SSH_USER@$VM_IPADDRESS:/tmp/package-lock.json
-    - ssh $SSH_USER@$VM_IPADDRESS "sudo rm -rf /var/www/html/node_modules && sudo cp /tmp/package.json /var/www/html && sudo cp /tmp/package-lock.json /var/www/html && cd /var/www/html && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash && source ~/.nvm/nvm.sh && nvm install 18 && nvm alias default 18 && nvm use 18 && sudo npm install -g npm@latest --unsafe-perm && sudo npm cache clean --force && sudo npm install --unsafe-perm && sudo npm install -g astro@latest --unsafe-perm && sudo npm run build --unsafe-perm"
+    - ssh $SSH_USER@$VM_IPADDRESS "export NVM_DIR=\"$HOME/.nvm\" && \
+        [ -s \"$NVM_DIR/nvm.sh\" ] && \. \"$NVM_DIR/nvm.sh\" && \
+        nvm use 18 && \ sudo rm -rf /var/www/html/node_modules && sudo cp /tmp/package.json /var/www/html && sudo cp /tmp/package-lock.json /var/www/html && cd /var/www/html && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash && source ~/.nvm/nvm.sh && nvm install 18 && nvm alias default 18 && nvm use 18 && sudo npm install -g npm@latest --unsafe-perm && sudo npm cache clean --force && sudo npm install --unsafe-perm && sudo npm install -g astro@latest --unsafe-perm && sudo npm run build --unsafe-perm"
   artifacts:
     paths:
       - public
