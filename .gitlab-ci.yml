@@ -11,8 +11,7 @@ variables:
 setup:
   stage: setup
   script:
-    - dnf update -y
-    - dnf install -y curl bash
+    - microdnf install -y curl bash
     - mkdir -p $NVM_DIR
     - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
     - export NVM_DIR="$HOME/.nvm"
