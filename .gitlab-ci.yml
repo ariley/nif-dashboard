@@ -10,7 +10,7 @@ variables:
 
 setup:
   stage: setup
-  image: node:18-chrome
+  image: wci-git.llnl.gov:4567/lwds/node:18-chrome
   script:
     - apk add --no-cache curl bash
     - mkdir -p $NVM_DIR
