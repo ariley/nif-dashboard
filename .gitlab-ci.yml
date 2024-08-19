@@ -6,12 +6,13 @@ stages:
 
 variables:
   NVM_DIR: "/home/riley45-sc/.nvm"
-  NODE_VERSION: "node:18-chrome"
+  NODE_VERSION: "18.20.4"
 
 setup:
   stage: setup
+  image: node:18-chrome
   script:
-    - microdnf install -y curl bash
+    - apk add --no-cache curl bash
     - mkdir -p $NVM_DIR
     - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
     - export NVM_DIR="$HOME/.nvm"
@@ -24,6 +25,7 @@ setup:
 
 install:
   stage: install
+  image: node:18-chrome
   script:
     - npm install
   artifacts:
@@ -32,6 +34,7 @@ install:
 
 build:
   stage: build
+  image: node:18-chrome
   script:
     - npm run build
   artifacts:
@@ -40,6 +43,7 @@ build:
 
 deploy:
   stage: deploy
+  image: node:18-chrome
   script:
     - eval $(ssh-agent -s)
     - echo "$SSH_PRIVATE_KEY_BASE64" | base64 -d > /tmp/ssh_private_key
