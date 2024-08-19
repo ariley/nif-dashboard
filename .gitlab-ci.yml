@@ -34,8 +34,7 @@ deploy:
   environment:
     name: production
     url: https://nif-dashboard.llnl.gov/ # Replace with your production URL
-  only:
-    - main # Run this job only on the main branch
+  
 
     
 
