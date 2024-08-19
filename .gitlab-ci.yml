@@ -6,7 +6,7 @@ stages:
 
 variables:
   NVM_DIR: "/home/riley45-sc/.nvm"
-  NODE_VERSION: "node:18-alpine"
+  NODE_VERSION: "node:18-chrome"
 
 setup:
   stage: setup
