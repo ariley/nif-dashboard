@@ -30,9 +30,12 @@ deploy:
   stage: deploy
   script:
     - echo "Deploying to production server"
-    - rsync -avz --delete dist/ $SSH_USER@$VM_IPADDRESS:/path/to/deployment/ # Replace with your actual deployment path
+    - rsync -avz --delete dist/ $SSH_USER@$VM_IPADDRESS:/var/www/html/ # Replace with your actual deployment path
   environment:
     name: production
-    url: http://your-production-url.com # Replace with your production URL
+    url: https://nif-dashboard.llnl.gov/ # Replace with your production URL
   only:
     - main # Run this job only on the main branch
+
+    
+
