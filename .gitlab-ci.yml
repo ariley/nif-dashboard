@@ -29,10 +29,12 @@ build:
 deploy:
   stage: deploy
   script:
-  - mkdir -p ~/.ssh
-  - sudo ssh-keygen -R $VM_IPADDRESS
-  - sudo ssh-keyscan -H $VM_IPADDRESS >> ~/.ssh/known_hosts
-  - scp -r public/* $SSH_USER@$VM_IPADDRESS:/var/www/html
+    - mkdir -p ~/.ssh
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - chmod 600 ~/.ssh/id_rsa  # Ensure the private key has the correct permissions
+    - ssh-keyscan -H $VM_IPADDRESS >> ~/.ssh/known_hosts
+    - scp -r public/* $SSH_USER@$VM_IPADDRESS:/var/www/html
   environment:
     name: production
     url: https://nif-dashboard.llnl.gov/ # Replace with your production URL
