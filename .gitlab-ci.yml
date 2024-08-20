@@ -29,7 +29,9 @@ build:
 deploy:
   stage: deploy
   script:
-    - scp -r public/* $SSH_USER@$VM_IPADDRESS:/var/www/html # deployment path
+  - mkdir -p ~/.ssh
+  - ssh-keyscan -H $VM_IPADDRESS >> ~/.ssh/known_hosts
+  - scp -r public/* $SSH_USER@$VM_IPADDRESS:/var/www/html
   environment:
     name: production
     url: https://nif-dashboard.llnl.gov/ # Replace with your production URL
