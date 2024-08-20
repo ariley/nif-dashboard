@@ -30,7 +30,8 @@ deploy:
   stage: deploy
   script:
   - mkdir -p ~/.ssh
-  - ssh-keyscan -H $VM_IPADDRESS >> ~/.ssh/known_hosts
+  - sudo ssh-keygen -R $VM_IPADDRESS
+  - sudo ssh-keyscan -H $VM_IPADDRESS >> ~/.ssh/known_hosts
   - scp -r public/* $SSH_USER@$VM_IPADDRESS:/var/www/html
   environment:
     name: production
