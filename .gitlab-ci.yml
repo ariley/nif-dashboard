@@ -29,13 +29,15 @@ build:
 deploy:
   stage: deploy
   script:
+    - apt-get update && apt-get install -y rsync ssh
     - echo "Deploying to production server"
-    - apt-get update && apt-get install -y rsync  # Install rsync
+    - mkdir -p ~/.ssh
+    - ssh-keyscan -H $VM_IPADDRESS >> ~/.ssh/known_hosts
     - rsync -avz --delete dist/ $SSH_USER@$VM_IPADDRESS:/var/www/html/ # Replace with your actual deployment path
   environment:
     name: production
     url: https://nif-dashboard.llnl.gov/ # Replace with your production URL
-  
+
 
     
 
