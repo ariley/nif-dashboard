@@ -41,6 +41,3 @@ deploy:
     name: production
     url: https://nif-dashboard.llnl.gov/ # Replace with your production URL
 
-
-    
-
