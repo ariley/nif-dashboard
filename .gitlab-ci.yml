@@ -31,7 +31,9 @@ deploy:
   script:
     - mkdir -p ~/.ssh
     - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - ssh-add ~/.ssh/id_rsa
     - ssh-keyscan -H $VM_IPADDRESS >> ~/.ssh/known_hosts
     - scp -r public/* $SSH_USER@$VM_IPADDRESS:/var/www/html
   environment:
