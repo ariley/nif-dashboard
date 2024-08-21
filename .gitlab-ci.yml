@@ -4,7 +4,7 @@ stages:
   - deploy
 
 # Use the official Node.js image with the version you need for Astro.js
-image: wci-git.llnl.gov:4567/lwds/node:18-chrome
+image: wci-git.llnl.gov:4567/lwds/node:18
 
 cache:
   paths:
@@ -29,13 +29,11 @@ build:
 deploy:
   stage: deploy
   script:
-    - mkdir -p ~/.ssh
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+  - mkdir -p ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
-    - eval $(ssh-agent -s)
     - ssh-add ~/.ssh/id_rsa
     - ssh-keyscan -H $VM_IPADDRESS >> ~/.ssh/known_hosts
-    - scp -r public/* $SSH_USER@$VM_IPADDRESS:/var/www/html
     - scp -r public/* $SSH_USER@$VM_IPADDRESS:/var/www/html
   environment:
     name: production
