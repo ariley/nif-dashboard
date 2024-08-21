@@ -4,31 +4,30 @@ threadsafe: true
 
 handlers:
 - url: /robots\.txt
-  public_files: robots.txt
+  static_files: robots.txt
   mime_type: text/plain
   upload: robots\.txt
 
 - url: /sitemap\.xml
-  public_files: sitemap.xml
+  static_files: sitemap.xml
   mime_type: text/xml
   upload: sitemap\.xml
 
-- url: /(.+)/
-  public_files: \1/index.html
-  upload: (.+)/index.html
+- url: /(.+)
+  static_files: \1
+  upload: (.+)
   expiration: "15m"
 
 - url: /
-  public_files: index.html
+  static_files: index.html
   upload: index.html
   secure: always
 
-- url: /(.*\.js)$
-  public_files: public/\1
-  upload: public/.*\.js$
-
 - url: /images/(.*)
-  public_files: images/\1
+  static_files: images/\1
   upload: images/(.*)
   secure: always
 
+- url: /(.*\.js)$
+  static_files: \1
+  upload: .*/.*\.js$
