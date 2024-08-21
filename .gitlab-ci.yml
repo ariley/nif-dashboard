@@ -29,12 +29,7 @@ build:
 deploy:
   stage: deploy
   script:
-  - mkdir -p ~/.ssh
-    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-    - chmod 600 ~/.ssh/id_rsa
-    - ssh-add ~/.ssh/id_rsa
-    - ssh-keyscan -H $VM_IPADDRESS >> ~/.ssh/known_hosts
-    - scp -r public/* $SSH_USER@$VM_IPADDRESS:/var/www/html
+  - cp -r public/* /var/www/html
   environment:
     name: production
     url: https://nif-dashboard.llnl.gov/ # Replace with your production URL
