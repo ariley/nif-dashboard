@@ -1,6 +1,4 @@
-runtime: python35
-api_version: 1
-threadsafe: true
+runtime: python39
 
 handlers:
 - url: /robots\.txt
@@ -15,19 +13,24 @@ handlers:
 
 - url: /(.+)
   static_files: \1
-  upload: (.+)
+  upload: dist/(.+)
   expiration: "15m"
 
 - url: /
   static_files: index.html
-  upload: index.html
+  upload: dist/index.html
   secure: always
 
-- url: ../src/images/(.*)
+- url: /images/(.*)
   static_files: images/\1
-  upload: images/(.*)
+  upload: dist/images/(.*)
   secure: always
 
 - url: /(.*\.js)$
   static_files: \1
-  upload: .*/.*\.js$
+  upload: dist/.*/.*\.js$
+
+- url: /_astro/(.*)  # Serve files from the _astro directory
+  static_files: dist/_astro/\1
+  upload: dist/_astro/(.*)
+  secure: always
