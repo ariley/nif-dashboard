@@ -24,12 +24,12 @@ build:
     - npm run build # Run Astro's build command
   artifacts:
     paths:
-      - public/ # Ensure the built files are saved as artifacts
+      - dist/ # Ensure the built files are saved as artifacts
 
 deploy:
   stage: deploy
   script:
-  - cp -r public/* /var/www/html
+  - cp -r dist/* /var/www/html
   environment:
     name: production
     url: https://nif-dashboard.llnl.gov/ # Replace with your production URL
