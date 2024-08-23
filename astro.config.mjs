@@ -13,6 +13,11 @@ export default defineConfig({
   outDir: './dist',
   publicDir: './public',
   vite: {
+    resolve: {
+      alias: {
+       "@": './src',
+      },
+    }, 
     plugins: [
       Components({
         resolvers: [
