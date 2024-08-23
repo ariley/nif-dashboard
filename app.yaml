@@ -23,7 +23,7 @@ handlers:
   upload: index.html
   secure: always
 
-- url: /images/(.*)
+- url: ../src/images/(.*)
   static_files: images/\1
   upload: images/(.*)
   secure: always
