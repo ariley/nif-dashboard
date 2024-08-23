@@ -4,7 +4,7 @@ stages:
   - deploy
 
 # Use the official Node.js image with the version you need for Astro.js
-image: wci-git.llnl.gov:4567/lwds/node:18
+image: 
 
 cache:
   paths:
@@ -32,7 +32,7 @@ deploy:
   - cp -r public/* /var/www/html
   environment:
     name: production
-    url: https://nif-dashboard.llnl.gov/ # Replace with your production URL
+    url:  # Replace with your production URL
   needs:
     - build
   tags:

@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function fetchExcelData() {
     try {
-      const response = await fetch('../src/data/data.xlsx');
+      const response = await fetch('/data/data.xlsx');
       const arrayBuffer = await response.arrayBuffer();
       const data = new Uint8Array(arrayBuffer);
       const workbook = XLSX.read(data, { type: 'array' });
