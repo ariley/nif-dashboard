@@ -1,4 +1,6 @@
 runtime: python39
+api_version: 1
+threadsafe: true
 
 handlers:
 - url: /robots\.txt
