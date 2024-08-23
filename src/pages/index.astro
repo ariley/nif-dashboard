@@ -15,11 +15,11 @@ const sunset = data.currentConditions.sunset;
 const conditions = data.currentConditions.conditions;
 const uvindex = data.currentConditions.uvindex;
 const weatherIconMap: { [key: string]: string } = { 
-  "Clear": "../src/images/amcharts_weather_icons_1.0.0/animated/day.svg", 
-  "Rain, Overcast": "../src/images/amcharts_weather_icons_1.0.0/animated/rainy-4.svg",
-  "Rain, Partially cloudy": "../src/images/amcharts_weather_icons_1.0.0/animated/rainy-3.svg",
-  "Partially cloudy": "../src/images/amcharts_weather_icons_1.0.0/animated/cloudy-day-2.svg",
-  "Overcast": "../src/images/amcharts_weather_icons_1.0.0/animated/cloudy.svg",
+  "Clear": "/images/amcharts_weather_icons_1.0.0/animated/day.svg", 
+  "Rain, Overcast": "/images/amcharts_weather_icons_1.0.0/animated/rainy-4.svg",
+  "Rain, Partially cloudy": "/images/amcharts_weather_icons_1.0.0/animated/rainy-3.svg",
+  "Partially cloudy": "/images/amcharts_weather_icons_1.0.0/animated/cloudy-day-2.svg",
+  "Overcast": "/images/amcharts_weather_icons_1.0.0/animated/cloudy.svg",
 };
 
 function getDayName(index, data) {
@@ -61,7 +61,7 @@ const co = dataAQI.currentConditions.co;
 const aqiBg = aqius <= 120 ? 'text-white bg-green-700' : 'bg-gray-700';
 ---
 
-<Layout title="Welcome to Astro.">
+<Layout title="NIF Dasboard">
   <main class="flex flex-col w-24600px] max-w-[100%] mx-auto">
     <div class="grid grid-cols-2 gap-6 w-full p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
       <div class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
@@ -74,7 +74,7 @@ const aqiBg = aqius <= 120 ? 'text-white bg-green-700' : 'bg-gray-700';
           </div>
           <div class="flex items-center justify-center p-4 text-xl font-semibold text-gray-600 dark:text-white">
             <div class="pr-2">{moment.utc(sunrise, 'HH:mm:ss').format('hh:mm A')}</div>
-            <img src="../src/images/amcharts_weather_icons_1.0.0/static/sunrise.svg" width="30">
+            <img src="/images/amcharts_weather_icons_1.0.0/static/sunrise.svg" width="30">
             <div class="pl-2">{moment.utc(sunset, 'HH:mm:ss').format('hh:mm A')}</div>
           </div>
         </div>
@@ -183,8 +183,8 @@ const aqiBg = aqius <= 120 ? 'text-white bg-green-700' : 'bg-gray-700';
 					<!-- Rows will be inserted here by JavaScript -->
 				  </tbody>
 			</table>
-			<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-			  <script type="module" is:inline src="../src/scripts/rotateTable.js"></script>
+			<!-- <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script> -->
+			  <script type="module" is:inline src="/scripts/rotateTable.js"></script>
 		</div>
     <footer class="flex items-center justify-center w-full h-24">
       <div class="flex items-center justify-center">
