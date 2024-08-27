@@ -29,8 +29,8 @@ build:
 deploy:
   stage: deploy
   script:
-  - cp -r dist/* /var/www/html
-  - chmod -R 755 /var/www/html
+  - cp -r dist/* /var/www/vhosts/nif-dashboard/ # Replace with your production path
+  - chmod -R 755 /var/www/vhosts/nif-dashboard/
   environment:
     name: production
     url: https://nif-dashboard.llnl.gov/ # Replace with your production URL
