@@ -29,7 +29,7 @@ build:
 deploy:
   stage: deploy
   script:
-  - cp -r dist/* /var/www/vhosts/nif-dashboard/ # Replace with your production path
+  - cp -r dist/* /var/www/vhosts/nif-dashboard/ # production path
   - chmod -R 755 /var/www/vhosts/nif-dashboard/
   environment:
     name: production
