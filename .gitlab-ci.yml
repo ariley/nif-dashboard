@@ -4,7 +4,7 @@ stages:
   - deploy
 
 # Use the official Node.js image with the version you need for Astro.js
-image: wci-git.llnl.gov:4567/lwds/node:18
+image: wci-repo.llnl.gov:4567/node:18
 
 cache:
   paths:
