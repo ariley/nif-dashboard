@@ -30,6 +30,7 @@ deploy:
   stage: deploy
   script:
   - cp -r dist/* /var/www/vhosts/nif-dashboard/ # production path
+  - chgrp -R apache /var/www/vhosts/nif-dashboard/
   - chmod -R 755 /var/www/vhosts/nif-dashboard/
   environment:
     name: production
