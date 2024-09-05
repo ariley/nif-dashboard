@@ -30,8 +30,8 @@ deploy:
   stage: deploy
   script:
   - cp -r dist/* /var/www/vhosts/
-  - chmod -R 755 /var/www/vhosts/
-  - chgrp -R apache /var/www/vhosts/
+  - sudo chmod -R 755 /var/www/vhosts/nif-dashboard/
+  - sudo chgrp -R apache /var/www/vhosts/nif-dashboard/
   environment:
     name: production
     url: https://nif-dashboard.llnl.gov/
