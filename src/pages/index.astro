@@ -65,20 +65,20 @@ const aqiBg = aqius <= 120 ? 'text-white bg-green-700' : 'bg-gray-700';
   <!-- Title/location -->
 
     <main class="flex flex-col w-24600px] max-w-[100%] mx-auto">
-    <div class="grid grid-cols-2 gap-6 w-full p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
       <div class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
-        <h3 class="mb-2 text-4xl font-bold text-gray-900 dark:text-white">Current Conditions</h3>
-        <h3 class="text-2xl pb-2 font-bold text-white dark:text-gray-400">Livermore, CA</h3>
+        <h3 class="mb-2 text-lg md:text-2xl lg:text-4xl font-bold text-gray-900 dark:text-white">Current Conditions</h3>
+        <h3 class="text-md md:text-xl lg:text-2xl pb-2 font-bold text-white dark:text-gray-300">Livermore, CA</h3>
         
        <!-- Weather condition -->
 <div class="mb-4 border border-gray-200 dark:border-gray-700 rounded-lg shadow bg-gradient-to-r from-cyan-700 to-blue-950">
   <div class="grid grid-cols-2 gap-2 sm:grid-cols-2">
     <img src={weatherIconMap[conditions]} width="300">
-    <div class="flex items-center justify-center text-5xl font-bold text-yellow-600 dark:text-yellow-600">{conditions}</div>
+    <div class="flex items-center justify-center text-3xl md:text-4xl lg:text-5xl font-bold text-yellow-600 dark:text-yellow-600">{conditions}</div>
   </div>
   
   <!-- Sunrise/sunset -->
-  <div class="flex justify-center py-2 text-3xl font-semibold text-gray-600 dark:text-white">
+  <div class="flex justify-center py-2 text-sm md:text-xl lg:text-3xl font-semibold text-gray-600 dark:text-white">
     <div class="pr-2">{moment.utc(sunrise, 'HH:mm:ss').format('hh:mm A')}</div>
     <img src="/images/amcharts_weather_icons_1.0.0/static/sunrise.svg" width="30">
     <div class="pl-2">{moment.utc(sunset, 'HH:mm:ss').format('hh:mm A')}</div>
@@ -86,52 +86,53 @@ const aqiBg = aqius <= 120 ? 'text-white bg-green-700' : 'bg-gray-700';
 </div>
 
         <!-- First weather stats -->
-        <div class="grid grid-cols-3 gap-6 sm:grid-cols-3">
-          <div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-700">
-            <h5 class="mb-2 text-sm font-bold tracking-tight text-gray-900 dark:text-gray-400">Temperature</h5>
-            <p class="font-normal text-4xl text-gray-700 dark:text-gray-100">{temp}°</p>
+        <div class="grid grid-cols-3 pt-4 gap-2 md:gap-6 sm:grid-cols-3">
+          <div class="block max-w-sm p2 md:p-6items-center bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-700">
+            <h5 class="mb-2  text-sm font-bold tracking-tight text-gray-900 dark:text-gray-300 ">Temperature</h5>
+            <p class="font-normal text-md md:text-xl lg:text-4xl  text-gray-700 dark:text-gray-100">{temp}°</p>
           </div>
-          <div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-700">
-            <h5 class="mb-2 text-sm font-bold tracking-tight text-gray-900 dark:text-gray-400">Humidity</h5>
-            <p class="font-normal text-4xl text-gray-700 dark:text-gray-100">{humidity}%</p>
+          <div class="block max-w-sm p2 md:p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-700">
+            <h5 class="mb-2 text-sm font-bold tracking-tight text-gray-900 dark:text-gray-300">Humidity</h5>
+            <p class="font-normal text-md md:text-xl lg:text-4xl  text-gray-700 dark:text-gray-100">{humidity}%</p>
           </div>
-          <div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-700">
-            <h5 class="mb-2 text-sm font-bold tracking-tight text-gray-900 dark:text-gray-400">Chance of rain</h5>
-            <p class="font-normal text-4xl text-gray-700 dark:text-gray-100">{precipprob}%</p>
+          <div class="block max-w-sm p2 md:p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-700">
+            <h5 class="mb-2 text-sm font-bold tracking-tight text-gray-900 dark:text-gray-300">Chance of rain</h5>
+            <p class="font-normal text-md md:text-xl lg:text-4xl  text-gray-700 dark:text-gray-100">{precipprob}%</p>
           </div>
         </div>
 
         <!-- Second weather stats -->
-        <div class="grid grid-cols-3 mt-6 gap-6 sm:grid-cols-3">
-          <div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow  dark:bg-gray-700 dark:border-gray-700">
-            <h5 class="mb-2 text-sm font-bold tracking-tight text-gray-900 dark:text-gray-400">Wind Speed</h5>
-            <p class="font-normal text-4xl text-gray-700 dark:text-gray-100">{windspeed}mph</p>
+        <div class="grid grid-cols-3 mt-6 gap-2 md:gap-6 sm:grid-cols-3">
+          <div class="block max-w-sm p2 md:p-6 bg-white border border-gray-200 rounded-lg shadow  dark:bg-gray-700 dark:border-gray-700">
+            <h5 class="mb-2 text-sm font-bold tracking-tight text-gray-900 dark:text-gray-300">Wind Speed</h5>
+            <p class="font-normal text-md md:text-xl lg:text-4xl  text-gray-700 dark:text-gray-100">{windspeed}mph</p>
           </div>
-          <div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-700">
-            <h5 class="mb-2 text-sm font-bold tracking-tight text-gray-900 dark:text-gray-400">Visibility</h5>
-            <p class="font-normal text-4xl text-gray-700 dark:text-gray-100">{visibility}mi</p>
+          <div class="block max-w-sm p2 md:p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-700">
+            <h5 class="mb-2 text-sm font-bold tracking-tight text-gray-900 dark:text-gray-300">Visibility</h5>
+            <p class="font-normal text-md md:text-xl lg:text-4xl  text-gray-700 dark:text-gray-100">{visibility}mi</p>
           </div>
-          <div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-700">
-            <h5 class="mb-2 text-sm font-bold tracking-tight text-gray-900 dark:text-gray-400">UV Index</h5>
-            <p class="font-normal text-4xl text-gray-700 dark:text-gray-100">{uvindex}%</p>
+          <div class="block max-w-sm p2 md:p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-700">
+            <h5 class="mb-2 text-sm font-bold tracking-tight text-gray-900 dark:text-gray-300">UV Index</h5>
+            <p class="font-normal text-md md:text-xl lg:text-4xl  text-gray-700 dark:text-gray-100">{uvindex}%</p>
           </div>
         </div>
-		<!-- Air Quality -->
-		<h3 class="mb-8 mt-10 text-4xl font-bold text-gray-900 dark:text-white">Air Quality</h3>
+		
+        <!-- Air Quality -->
+		<h3 class="mb-8 mt-10 text-md md:text-xl lg:text-4xl  font-bold text-gray-900 dark:text-white">Air Quality</h3>
 
 		<!-- <div class="mt-6 bg-white  dark:bg-gray-700 border border-gray-200 rounded-lg shadow dark:border-gray-700"> -->
-		    <div class="grid grid-cols-3 gap-6 sm:grid-cols-3 ">
-					<div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-700">
-						<h5 class="mb-2 text-sm font-bold tracking-tight text-gray-900 dark:text-gray-200">Ozone</h5>
-						<p class="font-normal text-4xl text-gray-700 dark:text-white">{o3}</p>
+		    <div class="grid grid-cols-3 gap-2 md:gap-6 sm:grid-cols-3 ">
+					<div class="block max-w-sm p2 md:p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-700">
+						<h5 class="mb-2 text-sm font-bold tracking-tight text-gray-900 dark:text-gray-300">Ozone</h5>
+						<p class="font-normal text-md md:text-xl lg:text-4xl  text-gray-700 dark:text-white">{o3}</p>
 					</div>
-					<div class={`${aqiBg} block max-w-sm p-6 border border-gray-200 rounded-lg shadow dark:border-gray-700`}>
-						<h5 class="mb-2 text-sm font-bold tracking-tight text-gray-900 dark:text-gray-200">Air quality index</h5>
-						<p class="font-normal text-4xl">{aqius}</p>
+					<div class={`${aqiBg} block max-w-sm p2 md:p-6 border border-gray-200 rounded-lg shadow dark:border-gray-700`}>
+						<h5 class="mb-2 text-sm font-bold tracking-tight text-gray-900 dark:text-gray-300">Air quality index</h5>
+						<p class="font-normal text-md md:text-xl lg:text-4xl ">{aqius}</p>
 					</div>
-							<div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-700">
-								<h5 class="mb-2 text-sm font-bold tracking-tight text-gray-900 dark:text-gray-200">Carbon Monoxide</h5>
-								<p class="font-normal text-4xl text-gray-700 dark:text-white">{co}</p>
+							<div class="block max-w-sm p2 md:p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-700">
+								<h5 class="mb-2 text-sm font-bold tracking-tight text-gray-900 dark:text-gray-300">Carbon Monoxide</h5>
+								<p class="font-normal text-md md:text-xl lg:text-4xl  text-gray-700 dark:text-white">{co}</p>
 				      </div>
 		 </div>
 		<!-- </div> -->
@@ -149,7 +150,7 @@ const aqiBg = aqius <= 120 ? 'text-white bg-green-700' : 'bg-gray-700';
 		<!-- Schedule -->
 		<div class="relative overflow-x-auto ">
 			<div class="w-full text-center sm:p-8 dark:bg-gray-800 dark:border-gray-700">
-        <h3 class="mb-4 text-4xl font-bold text-gray-900 dark:text-white">Current Schedule</h3>
+        <h3 class="mb-4 text-lg md:text-2xl lg:text-4xl font-bold text-gray-900 dark:text-white">Current Schedule</h3>
         <a href="/upload" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Update</a>
        
 			
