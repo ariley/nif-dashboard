@@ -52,7 +52,15 @@ document.addEventListener('DOMContentLoaded', () => {
 				const formattedDate2 = formatExcelDate(row[5]); // Assuming column 6 contains date
 				return {
 					header: row[6], // Store the header value
-					html: `<tr><td class="dark:border-gray-700">${row[0]}</td><td class="dark:border-gray-700">${row[1]}</td><td class="dark:border-gray-700">${row[2]}</td><td class="dark:border-gray-700">${row[3]}</td><td class="dark:border-gray-700">${formattedDate1}</td><td class="dark:border-gray-700">${formattedDate2}</td><td class="hidden-column">${row[6]}</td></tr>`,
+					html: `<tr class="text-xs sm:text-sm px-2"> <!-- Add text-xs for smaller text on mobile -->
+							<td class="dark:border-gray-700 px-2">${row[0]}</td>
+							<td class="dark:border-gray-700 px-2">${row[1]}</td>
+							<td class="dark:border-gray-700 px-2">${row[2]}</td>
+							<td class="dark:border-gray-700 px-2">${row[3]}</td>
+							<td class="dark:border-gray-700 px-2">${formattedDate1}</td>
+							<td class="dark:border-gray-700 px-2">${formattedDate2}</td>
+							<td class="hidden-column px-2">${row[6]}</td>
+						</tr>`,
 				};
 			});
 
@@ -85,7 +93,11 @@ document.addEventListener('DOMContentLoaded', () => {
 				currentHeader = rows[i].header;
 				// Use the color from the headerColorMap
 				const headerColor = headerColorMap[currentHeader];
-				tableBody.innerHTML += `<tr><td colspan="7" class="dark:border-gray-700 text-gray-700 uppercase ${headerColor} dark:text-white text-center">${currentHeader}</td></tr>`;
+				tableBody.innerHTML += `<tr class="text-xs sm:text-sm px-2">
+						<td colspan="7" class="dark:border-gray-700 text-gray-700 uppercase ${headerColor} dark:text-white text-center">
+							${currentHeader}
+						</td>
+					</tr>`;
 			}
 			tableBody.innerHTML += rows[i].html;
 		}
