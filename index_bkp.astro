@@ -69,24 +69,24 @@ const aqiBg = aqius <= 120 ? "text-white bg-green-700" : "bg-gray-700";
 
 <script>
   function adjustLayout() {
-    const isPortrait = window.matchMedia('(orientation: portrait)').matches;
-    const mainElement = document.querySelector('main');
-    const gridContainer = document.querySelector('.grid');
+    const isPortrait = window.matchMedia("(orientation: portrait)").matches;
+    const mainElement = document.querySelector("main");
+    const gridContainer = document.querySelector(".grid");
 
     if (isPortrait) {
-      mainElement.classList.remove('flex-row');
-      mainElement.classList.add('flex-col');
-      
+      mainElement.classList.remove("flex-row");
+      mainElement.classList.add("flex-col");
+
       // In portrait, keep the grid as it is (one column for small screens)
-      gridContainer.classList.remove('grid-cols-1');
-      gridContainer.classList.add('grid-cols-2');
+      gridContainer.classList.remove("grid-cols-1");
+      gridContainer.classList.add("grid-cols-2");
     } else {
-      mainElement.classList.remove('flex-col');
-      mainElement.classList.add('flex-row');
-      
+      mainElement.classList.remove("flex-col");
+      mainElement.classList.add("flex-row");
+
       // In landscape, stack the columns vertically
-      gridContainer.classList.remove('grid-cols-2');
-      gridContainer.classList.add('grid-cols-1');
+      gridContainer.classList.remove("grid-cols-2");
+      gridContainer.classList.add("grid-cols-1");
     }
   }
 
@@ -94,7 +94,7 @@ const aqiBg = aqius <= 120 ? "text-white bg-green-700" : "bg-gray-700";
   adjustLayout();
 
   // Listen for orientation changes
-  window.addEventListener('resize', adjustLayout);
+  window.addEventListener("resize", adjustLayout);
 </script>
 
 <Layout title="NIF Dasboard">
@@ -140,7 +140,6 @@ const aqiBg = aqius <= 120 ? "text-white bg-green-700" : "bg-gray-700";
             </div>
             <img
               src="/images/amcharts_weather_icons_1.0.0/static/sunrise.svg"
-              width="30"
             />
             <div class="pl-4">
               {moment.utc(sunset, "HH:mm:ss").format("hh:mm A")}
