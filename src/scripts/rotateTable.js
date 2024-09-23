@@ -1,4 +1,5 @@
 import * as XLSX from 'xlsx/xlsx.mjs';
+
 document.addEventListener('DOMContentLoaded', () => {
 	const tableBody = document.getElementById('tableBody');
 	const chunkSize = 10; // Number of rows to display at a time
@@ -22,9 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
 			const response = await fetch('data/data.xlsx');
 			const arrayBuffer = await response.arrayBuffer();
 			const data = new Uint8Array(arrayBuffer);
-			const workbook = XLSX.read(data, {type: 'array'});
+			const workbook = XLSX.read(data, { type: 'array' });
 			const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-			const jsonData = XLSX.utils.sheet_to_json(firstSheet, {header: 1});
+			const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
 
 			console.log('Parsed JSON data:', jsonData); // Log the raw JSON data
 
@@ -37,11 +38,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			// Assign colors to headers based on their values
 			let colorIndex = 0;
-
 			for (const row of sortedData) {
 				if (!headerColorMap[row[6]]) {
-					headerColorMap[row[6]] =
-						headerColors[colorIndex % headerColors.length];
+					headerColorMap[row[6]] = headerColors[colorIndex % headerColors.length];
 					colorIndex++;
 				}
 			}
@@ -52,20 +51,20 @@ document.addEventListener('DOMContentLoaded', () => {
 				const formattedDate2 = formatExcelDate(row[5]); // Assuming column 6 contains date
 				return {
 					header: row[6], // Store the header value
-					html: `<tr class="text-xs sm:text-sm px-2"> <!-- Add text-xs for smaller text on mobile -->
+					html: `<tr class="text-xs sm:text-sm px-2">
 							<td class="dark:border-gray-700 px-2">${row[0]}</td>
 							<td class="dark:border-gray-700 px-2">${row[1]}</td>
 							<td class="dark:border-gray-700 px-2">${row[2]}</td>
-							<td class="dark:border-gray-700 px-2">${row[3]}</td>
-							<td class="dark:border-gray-700 px-2 hidden lg:table-cell">${formattedDate1}</td>
-							<td class="dark:border-gray-700 px-2 hidden lg:table-cell">${formattedDate2}</td>
+							<td class="dark:border-gray-700 px-2 column-4 hidden lg:table-cell">${row[3]}</td>
+							<td class="dark:border-gray-700 px-2 column-5 hidden lg:table-cell">${formattedDate1}</td>
+							<td class="dark:border-gray-700 px-2">${formattedDate2}</td>
 							<td class="hidden-column px-2">${row[6]}</td>
 						</tr>`,
 				};
 			});
 
 			rotateRows(); // Start rotating rows after data is fetched
-			setInterval(rotateRows, 10000); // Rotate rows every 5 seconds
+			setInterval(rotateRows, 10000); // Rotate rows every 10 seconds
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
@@ -107,6 +106,29 @@ document.addEventListener('DOMContentLoaded', () => {
 		displayRows(currentIndex);
 		currentIndex = (currentIndex + chunkSize) % rows.length;
 	}
+
+	// Detect phone orientation and toggle visibility of columns 4 and 5
+	function checkOrientation() {
+		if (window.matchMedia("(orientation: landscape)").matches) {
+			// In landscape mode, show columns 4 and 5
+			const columns4 = document.querySelectorAll(".column-4");
+			const columns5 = document.querySelectorAll(".column-5");
+			columns4.forEach((col) => col.classList.remove("hidden"));
+			columns5.forEach((col) => col.classList.remove("hidden"));
+		} else {
+			// In portrait mode, hide columns 4 and 5
+			const columns4 = document.querySelectorAll(".column-4");
+			const columns5 = document.querySelectorAll(".column-5");
+			columns4.forEach((col) => col.classList.add("hidden"));
+			columns5.forEach((col) => col.classList.add("hidden"));
+		}
+	}
+
+	// Check orientation on load
+	checkOrientation();
+
+	// Add an event listener for orientation changes
+	window.addEventListener("resize", checkOrientation);
 
 	fetchExcelData(); // Fetch data on load
 });
