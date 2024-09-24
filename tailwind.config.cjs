@@ -13,17 +13,14 @@ module.exports = {
         },
       },
       screens: {
-        tablet: "834px", // ipad Pro 11
-        // => @media (min-width: 834px) { ... }
-
-        laptop: "1280px", // MacBook Pro
-        // => @media (min-width: 1280px) { ... }
-
-        desktop: "1920px",
-        // => @media (min-width: 1920px) { ... }
-
-        widescreen: "2880px",
-        // => @media (min-width: 2880) { ... }
+        'sm': '640px',
+        // => @media (min-width: 640px) { ... }
+  
+        'md': '1350px',
+        // => @media (min-width: 768px) { ... }
+  
+        'lg': '1600px',
+        // => @media (min-width: 1024px) { ... }
       },
     },
   },

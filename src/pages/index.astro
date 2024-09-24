@@ -60,9 +60,32 @@ const co = dataAQI.currentConditions.co;
 const aqiBg = aqius <= 120 ? 'text-white bg-green-700' : 'bg-gray-700';
 ---
 
+<script>
+  function adjustLayout() {
+    const isLandscape = window.matchMedia("(orientation: landscape)").matches;
+    const gridContainer = document.querySelector(".grid");
+    
+    if (window.innerWidth < 768) {
+      gridContainer.classList.add("grid-cols-1");
+      gridContainer.classList.remove("md:grid-cols-2");
+    } else {
+      gridContainer.classList.add("md:grid-cols-2");
+      gridContainer.classList.remove("grid-cols-1");
+    }
+  }
+
+  // Initial layout adjustment
+  adjustLayout();
+
+  // Listen for orientation and window resize changes
+  window.addEventListener("resize", adjustLayout);
+</script>
+
+
+
 <Layout title="NIF Dasboard">
   <main class="flex flex-col w-full mx-auto">
-    <!-- Force grid-cols-1 on small screens and grid-cols-2 only for medium and above -->
+    <!-- Force single-column on small screens and two-columns on medium and larger screens -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
       
       <!-- Current Conditions -->
@@ -83,7 +106,6 @@ const aqiBg = aqius <= 120 ? 'text-white bg-green-700' : 'bg-gray-700';
 
         <!-- Weather Stats -->
         <div class="grid grid-cols-3 pt-4 gap-2 md:gap-6 sm:grid-cols-3">
-          <!-- Add your temperature, humidity, rain, windspeed, visibility, UV index here -->
           <div class="block max-w-sm p-2 md:p-6 items-center bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-700">
             <h5 class="mb-2 text-sm font-bold tracking-tight text-gray-900 dark:text-gray-300">Temperature</h5>
             <p class="font-normal text-md md:text-xl lg:text-4xl text-gray-700 dark:text-gray-100">{temp}°</p>
@@ -111,9 +133,8 @@ const aqiBg = aqius <= 120 ? 'text-white bg-green-700' : 'bg-gray-700';
         </div>
 
         <!-- Air Quality -->
-        <h3 class="mb-8 mt-10 text-md md:text-xl lg:text-3xl font-bold text-gray-900 dark:text-white">Air Quality</h3>
+        <h3 class="mb-8 mt-24 md:pt-10 text-md md:text-xl lg:text-3xl font-bold text-gray-900 dark:text-white">Air Quality</h3>
         <div class="grid grid-cols-3 gap-2 md:gap-6 sm:grid-cols-3">
-          <!-- Add your air quality data here -->
           <div class="block max-w-sm p-2 md:p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-700">
             <h5 class="mb-2 text-sm font-bold tracking-tight text-gray-900 dark:text-gray-300">Ozone</h5>
             <p class="font-normal text-md md:text-xl lg:text-4xl text-gray-700 dark:text-white">{o3}</p>
@@ -131,7 +152,7 @@ const aqiBg = aqius <= 120 ? 'text-white bg-green-700' : 'bg-gray-700';
       <!-- End of Current Conditions -->
 
       <!-- Current Schedule -->
-      <div class="w-full md:col-span-1 md:order-2 p-4 text-center bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+      <div class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700 order-last">
         <div class="relative overflow-x-auto">
           <div class="w-full text-center sm:p-8 dark:bg-gray-800 dark:border-gray-700">
             <h3 class="mb-4 text-lg md:text-2xl lg:text-4xl font-bold text-gray-900 dark:text-white">Current Schedule</h3>
@@ -143,8 +164,8 @@ const aqiBg = aqius <= 120 ? 'text-white bg-green-700' : 'bg-gray-700';
                   <th scope="col" class="px-6 py-3">WON</th>
                   <th scope="col" class="px-6 py-3">Description</th>
                   <th scope="col" class="px-6 py-3">% Complete</th>
-                  <th scope="col" class="px-6 py-3 hidden lg:table-cell">Start Date</th>
-                  <th scope="col" class="px-6 py-3 hidden lg:table-cell">ECD</th>
+                  <th scope="col" class="px-6 py-3 sm:hidden">Start Date</th>
+                  <th scope="col" class="px-6 py-3 sm:hidden">ECD</th>
                 </tr>
               </thead>
               <tbody id="tableBody">
@@ -161,6 +182,5 @@ const aqiBg = aqius <= 120 ? 'text-white bg-green-700' : 'bg-gray-700';
 
     </div>
     <!-- End of Grid for Current Conditions and Current Schedule -->
-
   </main>
 </Layout>
