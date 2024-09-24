@@ -13,7 +13,7 @@ module.exports = {
         },
       },
       screens: {
-        'sm': '640px',
+        'sm': '576px',
         // => @media (min-width: 640px) { ... }
   
         'md': '1350px',
@@ -24,6 +24,10 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/aspect-ratio'),
+    require('@tailwindcss/forms'),
+  ],
 };
 

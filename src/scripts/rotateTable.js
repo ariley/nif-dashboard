@@ -55,8 +55,8 @@ document.addEventListener('DOMContentLoaded', () => {
 							<td class="dark:border-gray-700 px-2">${row[0]}</td>
 							<td class="dark:border-gray-700 px-2">${row[1]}</td>
 							<td class="dark:border-gray-700 px-2">${row[2]}</td>
-							<td class="dark:border-gray-700 px-2 sm:hidden">${row[3]}</td>
-							<td class="dark:border-gray-700 px-2 sm:hidden">${formattedDate1}</td>
+							<td class="dark:border-gray-700 px-2 column-4 portrait:hidden">${row[3]}</td>
+							<td class="dark:border-gray-700 px-2 column-5 portrait:hidden">${formattedDate1}</td>
 							<td class="dark:border-gray-700 px-2">${formattedDate2}</td>
 							<td class="hidden-column px-2">${row[6]}</td>
 						</tr>`,

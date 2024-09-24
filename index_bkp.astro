@@ -1,0 +1,365 @@
+---
+import Layout from "../layouts/Layout.astro";
+import moment from "moment";
+// import Upload from './upload.astro';
+
+const response = await fetch(
+  "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Livermore%2C%20CA?unitGroup=metric&include=current%2Chours&key=TMP3RS27JXNCTR7XNK9K9GBXZ&contentType=json",
+);
+const data = await response.json();
+const temp = Math.round(data.currentConditions.temp);
+const humidity = Math.round(data.currentConditions.humidity);
+const precipprob = data.currentConditions.precipprob;
+const windspeed = Math.round(data.currentConditions.windspeed);
+const visibility = Math.round(data.currentConditions.visibility);
+const sunrise = data.currentConditions.sunrise;
+const sunset = data.currentConditions.sunset;
+const conditions = data.currentConditions.conditions;
+const uvindex = data.currentConditions.uvindex;
+const weatherIconMap: { [key: string]: string } = {
+  Clear: "/images/amcharts_weather_icons_1.0.0/animated/day.svg",
+  "Rain, Overcast": "/images/amcharts_weather_icons_1.0.0/animated/rainy-4.svg",
+  "Rain, Partially cloudy":
+    "/images/amcharts_weather_icons_1.0.0/animated/rainy-3.svg",
+  "Partially cloudy":
+    "/images/amcharts_weather_icons_1.0.0/animated/cloudy-day-2.svg",
+  Overcast: "/images/amcharts_weather_icons_1.0.0/animated/cloudy.svg",
+};
+
+function getDayName(index, data) {
+  const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const date = new Date(0);
+  date.setUTCSeconds(data.days[index].datetimeEpoch);
+  return weekDays[date.getDay()];
+}
+
+let dayName0 = getDayName(0, data);
+let dayName1 = getDayName(1, data);
+let dayName2 = getDayName(2, data);
+let dayName3 = getDayName(3, data);
+let dayName4 = getDayName(4, data);
+let dayName5 = getDayName(5, data);
+let dayName6 = getDayName(6, data);
+
+const day0Min = Math.round(data.days[0].tempmin);
+const day1Min = Math.round(data.days[1].tempmin);
+const day2Min = Math.round(data.days[2].tempmin);
+const day3Min = Math.round(data.days[3].tempmin);
+const day4Min = Math.round(data.days[4].tempmin);
+const day5Min = Math.round(data.days[5].tempmin);
+const day6Min = Math.round(data.days[6].tempmin);
+
+const day0Max = Math.round(data.days[0].tempmax);
+const day1Max = Math.round(data.days[1].tempmax);
+const day2Max = Math.round(data.days[2].tempmax);
+const day3Max = Math.round(data.days[3].tempmax);
+const day4Max = Math.round(data.days[4].tempmax);
+const day5Max = Math.round(data.days[5].tempmax);
+const day6Max = Math.round(data.days[6].tempmax);
+
+const responseAQI = await fetch(
+  "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Livermore%2C%20CA?unitGroup=metric&include=current%2Chours&key=TMP3RS27JXNCTR7XNK9K9GBXZ&contentType=json&elements=datetime,pm1,pm2p5,pm10,o3,no2,so2,co,aqius,aqieur",
+);
+const dataAQI = await responseAQI.json();
+const aqius = dataAQI.currentConditions.aqius;
+const o3 = dataAQI.currentConditions.o3;
+const co = dataAQI.currentConditions.co;
+const aqiBg = aqius <= 120 ? "text-white bg-green-700" : "bg-gray-700";
+---
+
+<script>
+  function adjustLayout() {
+    const isPortrait = window.matchMedia("(orientation: portrait)").matches;
+    const mainElement = document.querySelector("main");
+    const gridContainer = document.querySelector(".grid");
+
+    if (isPortrait) {
+      mainElement.classList.remove("flex-row");
+      mainElement.classList.add("flex-col");
+
+      // In portrait, keep the grid as it is (one column for small screens)
+      gridContainer.classList.remove("grid-cols-1");
+      gridContainer.classList.add("grid-cols-2");
+    } else {
+      mainElement.classList.remove("flex-col");
+      mainElement.classList.add("flex-row");
+
+      // In landscape, stack the columns vertically
+      gridContainer.classList.remove("grid-cols-2");
+      gridContainer.classList.add("grid-cols-1");
+    }
+  }
+
+  // Check orientation on load
+  adjustLayout();
+
+  // Listen for orientation changes
+  window.addEventListener("resize", adjustLayout);
+</script>
+
+<Layout title="NIF Dasboard">
+  <!-- Title/location -->
+
+  <main class="flex flex-col w-24600px] max-w-[100%] mx-auto">
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700"
+    >
+      <div
+        class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700"
+      >
+        <h3
+          class="mb-2 text-lg md:text-2xl lg:text-4xl font-bold text-gray-900 dark:text-white"
+        >
+          Current Conditions
+        </h3>
+        <h3
+          class="text-md md:text-xl lg:text-2xl pb-2 font-bold text-white dark:text-gray-300"
+        >
+          Livermore, CA
+        </h3>
+
+        <!-- Weather condition -->
+        <div
+          class="mb-4 border border-gray-200 dark:border-gray-700 rounded-lg shadow bg-gradient-to-r from-cyan-700 to-blue-950"
+        >
+          <div class="grid grid-cols-2 gap-2 sm:grid-cols-2">
+            <img src={weatherIconMap[conditions]} width="300" />
+            <div
+              class="flex items-center justify-center text-3xl md:text-4xl lg:text-5xl font-bold text-yellow-600 dark:text-yellow-600"
+            >
+              {conditions}
+            </div>
+          </div>
+
+          <!-- Sunrise/sunset -->
+          <div
+            class="flex justify-center py-2 text-sm md:text-xl lg:text-3xl font-semibold text-gray-600 dark:text-white"
+          >
+            <div class="pr-4">
+              {moment.utc(sunrise, "HH:mm:ss").format("hh:mm A")}
+            </div>
+            <img
+              src="/images/amcharts_weather_icons_1.0.0/static/sunrise.svg"
+            />
+            <div class="pl-4">
+              {moment.utc(sunset, "HH:mm:ss").format("hh:mm A")}
+            </div>
+          </div>
+        </div>
+
+        <!-- First weather stats -->
+        <div class="grid grid-cols-3 pt-4 gap-2 md:gap-6 sm:grid-cols-3">
+          <div
+            class="block max-w-sm p-2 md:p-6 items-center bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-700"
+          >
+            <h5
+              class="mb-2 text-sm font-bold tracking-tight text-gray-900 dark:text-gray-300"
+            >
+              Temperature
+            </h5>
+            <p
+              class="font-normal text-md md:text-xl lg:text-4xl text-gray-700 dark:text-gray-100"
+            >
+              {temp}°
+            </p>
+          </div>
+          <div
+            class="block max-w-sm p-2 md:p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-700"
+          >
+            <h5
+              class="mb-2 text-sm font-bold tracking-tight text-gray-900 dark:text-gray-300"
+            >
+              Humidity
+            </h5>
+            <p
+              class="font-normal text-md md:text-xl lg:text-4xl text-gray-700 dark:text-gray-100"
+            >
+              {humidity}%
+            </p>
+          </div>
+          <div
+            class="block max-w-sm p-2 md:p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-700"
+          >
+            <h5
+              class="mb-2 text-sm font-bold tracking-tight text-gray-900 dark:text-gray-300"
+            >
+              Chance of rain
+            </h5>
+            <p
+              class="font-normal text-md md:text-xl lg:text-4xl text-gray-700 dark:text-gray-100"
+            >
+              {precipprob}%
+            </p>
+          </div>
+        </div>
+
+        <!-- Second weather stats -->
+        <div class="grid grid-cols-3 mt-6 gap-2 md:gap-6 sm:grid-cols-3">
+          <div
+            class="block max-w-sm p-2 md:p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-700 dark:border-gray-700"
+          >
+            <h5
+              class="mb-2 text-sm font-bold tracking-tight text-gray-900 dark:text-gray-300"
+            >
+              Wind Speed
+            </h5>
+            <p
+              class="font-normal text-md md:text-xl lg:text-4xl text-gray-700 dark:text-gray-100"
+            >
+              {windspeed}mph
+            </p>
+          </div>
+          <div
+            class="block max-w-sm p-2 md:p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-700"
+          >
+            <h5
+              class="mb-2 text-sm font-bold tracking-tight text-gray-900 dark:text-gray-300"
+            >
+              Visibility
+            </h5>
+            <p
+              class="font-normal text-md md:text-xl lg:text-4xl text-gray-700 dark:text-gray-100"
+            >
+              {visibility}mi
+            </p>
+          </div>
+          <div
+            class="block max-w-sm p-2 md:p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-700"
+          >
+            <h5
+              class="mb-2 text-sm font-bold tracking-tight text-gray-900 dark:text-gray-300"
+            >
+              UV Index
+            </h5>
+            <p
+              class="font-normal text-md md:text-xl lg:text-4xl text-gray-700 dark:text-gray-100"
+            >
+              {uvindex}%
+            </p>
+          </div>
+        </div>
+
+        <!-- Air Quality -->
+        <h3
+          class="mb-8 mt-10 text-md md:text-xl lg:text-4xl font-bold text-gray-900 dark:text-white"
+        >
+          Air Quality
+        </h3>
+
+        <!-- <div class="mt-6 bg-white  dark:bg-gray-700 border border-gray-200 rounded-lg shadow dark:border-gray-700"> -->
+        <div class="grid grid-cols-3 gap-2 md:gap-6 sm:grid-cols-3">
+          <div
+            class="block max-w-sm p-2 md:p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-700"
+          >
+            <h5
+              class="mb-2 text-sm font-bold tracking-tight text-gray-900 dark:text-gray-300"
+            >
+              Ozone
+            </h5>
+            <p
+              class="font-normal text-md md:text-xl lg:text-4xl text-gray-700 dark:text-white"
+            >
+              {o3}
+            </p>
+          </div>
+          <div
+            class={`${aqiBg} block max-w-sm p-2 md:p-6 border border-gray-200 rounded-lg shadow dark:border-gray-700`}
+          >
+            <h5
+              class="mb-2 text-sm font-bold tracking-tight text-gray-900 dark:text-gray-300"
+            >
+              Air quality index
+            </h5>
+            <p class="font-normal text-md md:text-xl lg:text-4xl">{aqius}</p>
+          </div>
+          <div
+            class="block max-w-sm p-2 md:p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-700"
+          >
+            <h5
+              class="mb-2 text-sm font-bold tracking-tight text-gray-900 dark:text-gray-300"
+            >
+              Carbon Monoxide
+            </h5>
+            <p
+              class="font-normal text-md md:text-xl lg:text-4xl text-gray-700 dark:text-white"
+            >
+              {co}
+            </p>
+          </div>
+        </div>
+        <!-- </div> -->
+        <footer class="flex items-center justify-center w-full h-24">
+          <div class="flex items-center justify-center">
+            <span class="text-sm text-gray-500 dark:text-gray-300"
+              >Data source: Livermore Municipal Airport (LVK)</span
+            >
+          </div>
+        </footer>
+      </div>
+
+      <!-- Right Column -->
+      <div
+        class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700"
+      >
+        <!-- Schedule -->
+        <div class="relative overflow-x-auto">
+          <div
+            class="w-full text-center sm:p-8 dark:bg-gray-800 dark:border-gray-700"
+          >
+            <h3
+              class="mb-4 text-lg md:text-2xl lg:text-4xl font-bold text-gray-900 dark:text-white"
+            >
+              Current Schedule
+            </h3>
+            <a
+              href="/upload"
+              type="button"
+              class="hidden lg:inline-block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+              >Update</a
+            >
+
+            <table
+              id="rotatingTable"
+              class="mt-8 w-full text-sm text-left rtl:text-right text-gray-500 dark:text-white dark:border-gray-700 rounded-lg"
+            >
+              <thead
+                class="text-xs text-center text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-white"
+              >
+                <tr>
+                  <th scope="col" class="px-6 py-3"> Facility </th>
+                  <th scope="col" class="px-6 py-3"> WON </th>
+                  <th scope="col" class="px-6 py-3"> Description </th>
+                  <th scope="col" class="px-6 py-3"> % Complete </th>
+                  <th scope="col" class="px-6 py-3 hidden lg:table-cell">
+                    Start Date
+                  </th>
+                  <th scope="col" class="px-6 py-3 hidden lg:table-cell">
+                    ECD
+                  </th>
+                  <th class="hidden-column" scope="col" class="px-6 py-3">
+                    Type
+                  </th>
+                </tr>
+              </thead>
+              <tbody id="tableBody">
+                <!-- Rows will be inserted here by JavaScript -->
+              </tbody>
+            </table>
+            <!-- <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script> -->
+            <script>
+              import "../scripts/rotateTable.js";
+            </script>
+          </div>
+          <footer class="flex items-center justify-center w-full h-24">
+            <div class="flex items-center justify-center">
+              <span
+                class="text-sm align-text-bottom text-gray-500 dark:text-gray-300"
+                >Data source: EAM</span
+              >
+            </div>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </main></Layout
+>
