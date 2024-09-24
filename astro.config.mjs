@@ -12,6 +12,10 @@ export default defineConfig({
   site: 'https://nif-dashboard-riley45-c15310d27d07474987c11102447766eb05df9900c.sd-pages.llnl.gov/',
   outDir: './dist',
   publicDir: './public',
+  server: {
+    host: true,  // Ensures it listens on 0.0.0.0 (all network interfaces)
+    port: 3000   // Port where the app will run
+  },
   vite: {
     resolve: {
       alias: {
