@@ -7,43 +7,31 @@ stages:
 image: wci-repo.llnl.gov:4567/lwds/node:18
 
 cache:
-  key: ${CI_COMMIT_REF_SLUG}
   paths:
-    - node_modules/  # Cache node_modules between stages
+    - node_modules/
 
 install:
   stage: install
   script:
     - npm ci # Clean install dependencies
-  cache:
-    paths:
-      - node_modules/
   artifacts:
     paths:
-      - node_modules/ # Persist node_modules to the next stage
+      - node_modules/
 
 build:
   stage: build
   script:
     - npm run build # Run Astro's build command
-  cache:
-    paths:
-      - node_modules/ # Ensure cache is also available during the build
   artifacts:
     paths:
       - dist/ # Ensure the built files are saved as artifacts
-      - node_modules/ # Persist node_modules to the next stage
 
 deploy:
   stage: deploy
   script:
-    - cp -r dist/* /var/www/vhosts/nif-dashboard/ # Copy build files to the server
-    - cp -r node_modules /var/www/vhosts/nif-dashboard/ # Ensure dependencies are deployed
-    - sudo chmod -R 755 /var/www/vhosts/nif-dashboard/
-    - sudo chgrp -R apache /var/www/vhosts/nif-dashboard/
-  cache:
-    paths:
-      - node_modules/ # Use the cached node_modules
+  - cp -r dist/* /var/www/vhosts/nif-dashboard/
+  - sudo chmod -R 755 /var/www/vhosts/nif-dashboard/
+  - sudo chgrp -R apache /var/www/vhosts/nif-dashboard/
   environment:
     name: production
     url: https://nif-dashboard.llnl.gov/
