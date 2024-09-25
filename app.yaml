@@ -28,6 +28,11 @@ handlers:
   upload: dist/images/(.*)
   secure: always
 
+- url: /scripts/(.*)
+  static_files: scripts/\1
+  upload: dist/scripts/(.*)
+  secure: always
+
 - url: /(.*\.js)$
   static_files: \1
   upload: dist/.*/.*\.js$
