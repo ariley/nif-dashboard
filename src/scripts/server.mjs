@@ -13,13 +13,13 @@ const PORT = process.env.PORT || 3000;
 // SSL options (replace with your actual certificate and key file paths)
 const sslOptions = {
   key: fs.readFileSync('/etc/pki/tls/private/localhost.key'),
-  cert: fs.readFileSync('/etc/pki/tls/certs/localhost.crt')
+  cert: fs.readFileSync('/etc/pki/tls/certs/localhost.crt'),
 };
 
 // Enable CORS
 app.use(cors());
 
-// Enable files upload
+// Enable file uploads
 app.use(fileUpload({
   createParentPath: true
 }));
@@ -59,15 +59,6 @@ app.post('/upload', (req, res) => {
       });
     }
 
-    // Check file size
-    if (file.size > 5 * 1024 * 1024) { // 5MB
-      console.log('File size exceeds limit'); // Debug log
-      return res.status(400).json({
-        status: false,
-        message: 'File size exceeds the limit of 5MB.'
-      });
-    }
-
     // Move the file to the correct data directory
     const uploadPath = path.join(publicPath, 'data', 'data.xlsx');
     console.log(`Moving file to ${uploadPath}`); // Debug log
@@ -103,6 +94,10 @@ app.post('/upload', (req, res) => {
 });
 
 // Create HTTPS server with SSL options
-https.createServer(sslOptions, app).listen(PORT, () => {
-  console.log(`Server is running on port ${PORT} with SSL`);
-});
+https.createServer(sslOptions, app)
+  .on('error', (err) => {
+    console.error(`SSL Error: ${err.message}`);
+  })
+  .listen(PORT, () => {
+    console.log(`Server is running on port ${PORT} with SSL`);
+  });
