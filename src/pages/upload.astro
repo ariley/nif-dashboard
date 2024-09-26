@@ -47,13 +47,6 @@ import Layout from '../layouts/Layout.astro';
   // Handle the form submission and upload the file
   const uploadForm = document.getElementById('uploadForm');
 if (uploadForm) {
-    uploadForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        // Rest of the code here...
-    });
-} else {
-    console.error('Upload form not found');
-}
   document.getElementById('uploadForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const errorDiv = document.getElementById('error');
@@ -104,4 +97,8 @@ if (uploadForm) {
       errorDiv.textContent = 'An error occurred: ' + err.message;
     }
   });
+});
+} else {
+    console.error('Upload form not found');
+}
 </script>
