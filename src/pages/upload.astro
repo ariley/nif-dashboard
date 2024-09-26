@@ -70,7 +70,7 @@ if (uploadForm) {
 
     try {
       console.log('Uploading file...');
-      const response = await fetch('http://nif-dashboard.llnl.gov:3000/upload/', {
+      const response = await fetch('https://nif-dashboard.llnl.gov:3000/upload/', {
         method: 'POST',
         body: formData,
       });

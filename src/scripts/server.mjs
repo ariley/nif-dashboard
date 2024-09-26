@@ -1,3 +1,5 @@
+import https from 'https';
+import fs from 'fs';
 import express from 'express';
 import fileUpload from 'express-fileupload';
 import path from 'path';
@@ -7,6 +9,12 @@ import cors from 'cors';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// SSL options (replace with your actual certificate and key file paths)
+const sslOptions = {
+  key: fs.readFileSync('/path/to/your/private.key'),
+  cert: fs.readFileSync('/path/to/your/certificate.crt')
+};
 
 // Enable CORS
 app.use(cors());
@@ -94,7 +102,7 @@ app.post('/upload', (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+// Create HTTPS server with SSL options
+https.createServer(sslOptions, app).listen(PORT, () => {
+  console.log(`Server is running on port ${PORT} with SSL`);
 });
-
