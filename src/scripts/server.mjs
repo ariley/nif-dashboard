@@ -12,8 +12,8 @@ const PORT = process.env.PORT || 3000;
 
 // SSL options (replace with your actual certificate and key file paths)
 const sslOptions = {
-  key: fs.readFileSync('/path/to/your/private.key'),
-  cert: fs.readFileSync('/path/to/your/certificate.crt')
+  key: fs.readFileSync('/etc/pki/tls/private/localhost.key'),
+  cert: fs.readFileSync('etc/pki/tls/certs/localhost.crt')
 };
 
 // Enable CORS
