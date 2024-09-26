@@ -45,6 +45,15 @@ import Layout from '../layouts/Layout.astro';
 
 <script>
   // Handle the form submission and upload the file
+  const uploadForm = document.getElementById('uploadForm');
+if (uploadForm) {
+    uploadForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        // Rest of the code here...
+    });
+} else {
+    console.error('Upload form not found');
+}
   document.getElementById('uploadForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const errorDiv = document.getElementById('error');

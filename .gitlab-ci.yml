@@ -30,7 +30,7 @@ deploy:
   stage: deploy
   script:
   - cp -r dist/* /var/www/vhosts/nif-dashboard/
-  - cp -r node_modules /var/www/vhosts/nif-dashboard/
+  - cp -r node_modules /var/www/vhosts/nif-dashboard/ # Ensure dependencies are deployed
   - sudo chmod -R 755 /var/www/vhosts/nif-dashboard/
   - sudo chgrp -R apache /var/www/vhosts/nif-dashboard/
   environment:
