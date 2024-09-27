@@ -16,11 +16,8 @@ const sslOptions = {
   cert: fs.readFileSync('/etc/pki/tls/certs/localhost.crt'),
 };
 
-// Enable CORS with HTTPS allowed
-app.use(cors({
-  origin: 'https://nif-dashboard.llnl.gov', // Ensure only your domain is allowed
-  credentials: true
-}));
+// Enable CORS
+app.use(cors());
 
 // Enable file uploads
 app.use(fileUpload({
@@ -42,6 +39,7 @@ app.post('/upload', (req, res) => {
   console.log('Upload request received'); // Debug log
   console.log('Public path:', publicPath); // Debug log
   try {
+    // Check if any files were uploaded
     if (!req.files || Object.keys(req.files).length === 0) {
       console.log('No files uploaded'); // Debug log
       return res.status(400).json({
@@ -53,7 +51,7 @@ app.post('/upload', (req, res) => {
     let file = req.files.file;
     console.log(`File received: ${file.name}`); // Debug log
 
-    // Check file extension
+    // Validate file extension
     if (path.extname(file.name) !== '.xlsx') {
       console.log('Invalid file format'); // Debug log
       return res.status(400).json({
@@ -62,21 +60,32 @@ app.post('/upload', (req, res) => {
       });
     }
 
-    // Move the file to the correct data directory
+    // Check file size (limit set to 5MB)
+    if (file.size > 5 * 1024 * 1024) { // 5MB limit
+      console.log('File size exceeds limit'); // Debug log
+      return res.status(400).json({
+        status: false,
+        message: 'File size exceeds the limit of 5MB.'
+      });
+    }
+
+    // Define the path where the file will be saved
     const uploadPath = path.join(publicPath, 'data', 'data.xlsx');
     console.log(`Moving file to ${uploadPath}`); // Debug log
-    file.mv(uploadPath, err => {
+
+    // Move the file to the upload directory
+    file.mv(uploadPath, (err) => {
       if (err) {
         console.log('Error moving file:', err); // Debug log
         return res.status(500).json({
           status: false,
           message: 'Error moving file',
-          error: err
+          error: err.message // Return error message
         });
       }
 
       console.log('File uploaded successfully'); // Debug log
-      res.status(200).json({
+      return res.status(200).json({
         status: true,
         message: 'File is uploaded',
         data: {
@@ -88,18 +97,18 @@ app.post('/upload', (req, res) => {
     });
   } catch (err) {
     console.log('Server error:', err); // Debug log
-    res.status(500).json({
+    return res.status(500).json({
       status: false,
       message: 'Server error',
-      error: err
+      error: err.message // Include detailed error message
     });
   }
 });
 
-// Create HTTPS server with SSL options and handling
+// HTTPS server setup with SSL options
 https.createServer(sslOptions, app)
   .on('error', (err) => {
-    console.error(`SSL Error: ${err.message}`);
+    console.error(`SSL Error: ${err.message}`); // Log SSL-related errors
   })
   .listen(PORT, () => {
     console.log(`Server is running on port ${PORT} with SSL`);
