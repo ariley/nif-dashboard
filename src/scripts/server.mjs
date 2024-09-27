@@ -16,8 +16,11 @@ const sslOptions = {
   cert: fs.readFileSync('/etc/pki/tls/certs/localhost.crt'),
 };
 
-// Enable CORS
-app.use(cors());
+// Enable CORS with HTTPS allowed
+app.use(cors({
+  origin: 'https://nif-dashboard.llnl.gov', // Ensure only your domain is allowed
+  credentials: true
+}));
 
 // Enable file uploads
 app.use(fileUpload({
@@ -93,7 +96,7 @@ app.post('/upload', (req, res) => {
   }
 });
 
-// Create HTTPS server with SSL options
+// Create HTTPS server with SSL options and handling
 https.createServer(sslOptions, app)
   .on('error', (err) => {
     console.error(`SSL Error: ${err.message}`);
