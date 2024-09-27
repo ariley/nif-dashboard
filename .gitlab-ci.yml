@@ -42,8 +42,9 @@ deploy:
     - sudo chmod -R 755 /var/www/vhosts/nif-dashboard/
     - sudo chgrp -R apache /var/www/vhosts/nif-dashboard/
 
-    # Add command to run the Express server
-    - nohup node /var/www/vhosts/nif-dashboard/scripts/server.mjs > /dev/null 2>&1 &
+    # Add command to run the Express server and log output
+    - nohup node /var/www/vhosts/nif-dashboard/scripts/server.mjs > /var/www/vhosts/nif-dashboard/server.log 2>&1 &
+
   cache:
     paths:
       - node_modules/ # Use the cached node_modules
