@@ -10,7 +10,7 @@ import cors from 'cors';
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// SSL options (ensure paths are correct for your server)
+// SSL options (replace with your actual certificate and key file paths)
 const sslOptions = {
   key: fs.readFileSync('/etc/pki/tls/private/localhost.key'),
   cert: fs.readFileSync('/etc/pki/tls/certs/localhost.crt'),
@@ -113,5 +113,3 @@ https.createServer(sslOptions, app)
   .listen(PORT, () => {
     console.log(`Server is running on port ${PORT} with SSL`);
   });
-
-  Ensured logging
