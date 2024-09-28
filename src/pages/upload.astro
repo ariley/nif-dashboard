@@ -87,7 +87,7 @@ if (uploadForm) {
       const result = await response.json();
       console.log('Upload result:', result);
 
-      successDiv.textContent = result.message || 'File uploaded successfully.';
+      successDiv.textContent = result.message || 'File uploaded successfully';
       // Redirect to home page after displaying success message
       setTimeout(() => {
         window.location.href = '/';
