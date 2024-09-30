@@ -1,11 +1,11 @@
-import https from 'https';
-import fs from 'fs';
-import express from 'express';
-import fileUpload from 'express-fileupload';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-import cors from 'cors';
+const https = require('https');
+const fs = require('fs');
+const express = require('express');
+const fileUpload = require('express-fileupload');
+const path = require('path');
+const cors = require('cors');
+const { fileURLToPath } = require('url');
+const { dirname } = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;

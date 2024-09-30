@@ -37,6 +37,10 @@ build:
 deploy:
   stage: deploy
   script:
+      # Install Node.js 18 using nvm
+    - nvm install 18
+    - nvm use 18
+    - nvm alias default 18
     - cp -r dist/* /var/www/vhosts/nif-dashboard/ # Copy build files to the server
     - cp -r node_modules /var/www/vhosts/nif-dashboard/ # Ensure dependencies are deployed
     - sudo chmod -R 755 /var/www/vhosts/nif-dashboard/
