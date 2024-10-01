@@ -2,7 +2,7 @@ import * as XLSX from 'xlsx/xlsx.mjs';
 
 document.addEventListener('DOMContentLoaded', () => {
 	const tableBody = document.getElementById('tableBody');
-	const chunkSize = 10; // Number of rows to display at a time
+	const chunkSize = 21; // Number of rows to display at a time
 	let currentIndex = 0;
 	let rows = [];
 
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	async function fetchExcelData() {
 		try {
-			const response = await fetch('data/data.xlsx');
+			const response = await fetch('/data/data.xlsx');
 			const arrayBuffer = await response.arrayBuffer();
 			const data = new Uint8Array(arrayBuffer);
 			const workbook = XLSX.read(data, { type: 'array' });

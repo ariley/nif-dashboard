@@ -1,0 +1,30 @@
+---
+// Astro component for showing the message
+---
+
+<div id="message" class="fixed top-10 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 transition-opacity duration-500 opacity-0"></div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const messageDiv = document.getElementById('message');
+    const uploadMessage = localStorage.getItem('uploadMessage');
+
+    if (uploadMessage) {
+      // Display the message
+      messageDiv.textContent = uploadMessage;
+
+      // Fade-in the message
+      messageDiv.classList.remove('opacity-0');
+      messageDiv.classList.add('opacity-100');
+
+      // Remove the message after 2 seconds
+      setTimeout(() => {
+        messageDiv.classList.remove('opacity-100');
+        messageDiv.classList.add('opacity-0');
+      }, 2000);
+
+      // Clear the message from localStorage after it's displayed
+      localStorage.removeItem('uploadMessage');
+    }
+  });
+</script>

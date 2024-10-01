@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import moment from 'moment';
+import ShowMessage from '../components/ShowMessage.astro'; 
 
 const response = await fetch('https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Livermore%2C%20CA?unitGroup=metric&include=current%2Chours&key=TMP3RS27JXNCTR7XNK9K9GBXZ&contentType=json');
 const data = await response.json();
@@ -60,31 +61,11 @@ const co = dataAQI.currentConditions.co;
 const aqiBg = aqius <= 120 ? 'dark:text-white bg-green-700 !important' : 'text-white bg-gray-700';
 ---
 
-<!-- <script>
-  function adjustLayout() {
-    const isLandscape = window.matchMedia("(orientation: landscape)").matches;
-    const gridContainer = document.querySelector(".grid");
-    
-    if (window.innerWidth < 768) {
-      gridContainer.classList.add("grid-cols-1");
-      gridContainer.classList.remove("md:grid-cols-2");
-    } else {
-      gridContainer.classList.add("md:grid-cols-2");
-      gridContainer.classList.remove("grid-cols-1");
-    }
-  }
-
-  // Initial layout adjustment
-  adjustLayout();
-
-  // Listen for orientation and window resize changes
-  window.addEventListener("resize", adjustLayout);
-</script> -->
-
-
 
 <Layout title="NIF Dasboard">
   <main class="flex flex-col w-full mx-auto">
+     <!-- Success Message Display -->
+     <ShowMessage client:load />
     <!-- Force single-column on small screens and two-columns on medium and larger screens -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
       
@@ -200,3 +181,4 @@ const aqiBg = aqius <= 120 ? 'dark:text-white bg-green-700 !important' : 'text-w
      
   </main>
 </Layout>
+

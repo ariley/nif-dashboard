@@ -44,60 +44,47 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <script>
-  // Handle the form submission and upload the file
-  const uploadForm = document.getElementById('uploadForm');
-if (uploadForm) {
   document.getElementById('uploadForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const errorDiv = document.getElementById('error');
     const successDiv = document.getElementById('success');
     errorDiv.textContent = '';
     successDiv.textContent = '';
-
+    
     const fileInput = document.getElementById('file');
     const file = fileInput.files[0];
-
+    
     if (!file) {
-      console.log('No file selected');
       errorDiv.textContent = 'No file selected.';
       return;
     }
-
-    console.log('File selected:', file.name);
-
+    
     const formData = new FormData();
     formData.append('file', file);
-
+    
     try {
-      console.log('Uploading file...');
-      const response = await fetch('/upload', {
+      const response = await fetch('http://localhost:3000/upload', {
         method: 'POST',
         body: formData,
       });
-
-      console.log('Response status:', response.status);
-      console.log('Response headers:', [...response.headers]);
-
+      // Check if the response is ok (status 200-299)
       if (!response.ok) {
-        const text = await response.text();
-        console.log('Error response text:', text);
-        throw new Error(text);
+        throw new Error(`Server responded with status ${response.status}`);
       }
 
       const result = await response.json();
-      console.log('Upload result:', result);
-
-      successDiv.textContent = result.message || 'File uploaded successfully';
-      // Redirect to home page after displaying success message
-      setTimeout(() => {
+      
+      if (!response.ok) {
+        errorDiv.textContent = result.message || 'An error occurred during the upload.';
+      } else {
+        // Save the success message to localStorage or sessionStorage
+        localStorage.setItem('uploadMessage', result.message || 'The schedule has been updated.');
+        
+        // Redirect to the home page (index.html)
         window.location.href = '/';
-      }, 2000);
+      }
     } catch (err) {
-      console.log('Upload error:', err);
       errorDiv.textContent = 'An error occurred: ' + err.message;
     }
   });
-} else {
-    console.error('Upload form not found');
-}
 </script>
