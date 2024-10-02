@@ -2,3 +2,5 @@ node_modules
 .astro/
 .DS_Store
 server copy.mjs
+.astro
+dist
