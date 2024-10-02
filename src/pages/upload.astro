@@ -5,7 +5,7 @@ import Layout from '../layouts/Layout.astro';
 <Layout title="Upload schedule">
   <main class="mx-auto dark">
     <!-- Upload Form -->
-    <form id="uploadForm" class="max-w-lg mx-auto mt-20 md:mt-40 bg-gray-800 p-6 sm:p-8 md:p-10 rounded-lg">
+    <form id="uploadForm" class="max-w-lg mx-auto mt-20 md:mt-40 bg-gray-800 p-6 sm:p-8 md:p-10 rounded-lg" enctype="multipart/form-data">
       <!-- Title -->
       <h3 class="flex justify-center items-center mb-6 sm:mb-8 md:mb-10 text-2xl sm:text-3xl md:text-4xl font-bold text-white">
         Upload new schedule
@@ -43,7 +43,11 @@ import Layout from '../layouts/Layout.astro';
   </main>
 </Layout>
 
+
 <script>
+  //This tells typescript not to check this code
+  //@ts-nocheck
+  import { navigate } from "astro:transitions/client";
   document.getElementById('uploadForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const errorDiv = document.getElementById('error');
@@ -63,11 +67,11 @@ import Layout from '../layouts/Layout.astro';
     formData.append('file', file);
     
     try {
-      const response = await fetch('http://localhost:3000/upload', {
+      const response = await fetch('/api/upload', {
         method: 'POST',
         body: formData,
       });
-      // Check if the response is ok (status 200-299)
+
       if (!response.ok) {
         throw new Error(`Server responded with status ${response.status}`);
       }
@@ -77,14 +81,14 @@ import Layout from '../layouts/Layout.astro';
       if (!response.ok) {
         errorDiv.textContent = result.message || 'An error occurred during the upload.';
       } else {
-        // Save the success message to localStorage or sessionStorage
-        localStorage.setItem('uploadMessage', result.message || 'The schedule has been updated.');
-        
-        // Redirect to the home page (index.html)
-        window.location.href = '/';
+        // Show success alert and redirect to the homepage or another page
+        alert('File uploaded successfully!');
+        navigate('/')
       }
     } catch (err) {
       errorDiv.textContent = 'An error occurred: ' + err.message;
     }
   });
 </script>
+
+
